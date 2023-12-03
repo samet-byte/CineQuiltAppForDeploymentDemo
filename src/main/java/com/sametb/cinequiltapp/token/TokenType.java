@@ -1,4 +1,4 @@
-package com.alibou.security.token;
+package com.sametb.cinequiltapp.token;
 
 public enum TokenType {
   BEARER

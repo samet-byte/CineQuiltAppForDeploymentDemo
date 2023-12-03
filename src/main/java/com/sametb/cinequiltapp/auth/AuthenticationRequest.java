@@ -1,4 +1,4 @@
-package com.alibou.security.auth;
+package com.sametb.cinequiltapp.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthenticationRequest {
-
-  private String email;
+  //todo: change to usernameOrPassword
+  private String emailOrUsername;
   String password;
 }

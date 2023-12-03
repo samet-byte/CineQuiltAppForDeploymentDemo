@@ -1,6 +1,7 @@
-package com.alibou.security.token;
+package com.sametb.cinequiltapp.token;
 
-import com.alibou.security.user.User;
+
+import com.sametb.cinequiltapp.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +20,7 @@ public class Token {
   @GeneratedValue
   public Integer id;
 
-  @Column(unique = true)
+  @Column(unique = true, length = 500)
   public String token;
 
   @Enumerated(EnumType.STRING)

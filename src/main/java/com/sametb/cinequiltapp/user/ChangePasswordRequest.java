@@ -1,4 +1,4 @@
-package com.alibou.security.user;
+package com.sametb.cinequiltapp.user;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -12,4 +12,5 @@ public class ChangePasswordRequest {
     private String currentPassword;
     private String newPassword;
     private String confirmationPassword;
+    //todo: confirmation question and answer
 }

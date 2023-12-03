@@ -1,6 +1,7 @@
-package com.alibou.security.config;
+package com.sametb.cinequiltapp.config;
 
-import com.alibou.security.token.TokenRepository;
+import com.sametb.cinequiltapp._custom.SamTextFormat;
+import com.sametb.cinequiltapp.token.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,7 @@ public class LogoutService implements LogoutHandler {
     if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
       return;
     }
+    SamTextFormat.Companion.create(authentication.getName()).cyan().print();
     jwt = authHeader.substring(7);
     var storedToken = tokenRepository.findByToken(jwt)
         .orElse(null);

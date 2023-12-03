@@ -8,6 +8,10 @@ class CineQuiltAppApplicationTests {
 
     @Test
     void contextLoads() {
+
+
+
+
     }
 
 }

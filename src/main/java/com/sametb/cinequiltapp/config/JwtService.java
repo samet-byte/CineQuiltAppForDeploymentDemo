@@ -1,19 +1,18 @@
-package com.alibou.security.config;
+package com.sametb.cinequiltapp.config;
+
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+
+import java.security.Key;
+import java.util.*;
+import java.util.function.Function;
 
 @Service
 public class JwtService {
@@ -56,9 +55,22 @@ public class JwtService {
           UserDetails userDetails,
           long expiration
   ) {
+
+    List<String> roles = new ArrayList<>();
+    Map<String, Object> rolesClaim = new HashMap<>();
+    userDetails.getAuthorities().forEach(a -> roles.add(a.getAuthority()));
+    rolesClaim.put("roles", roles);
+
     return Jwts
             .builder()
+            .setHeaderParam("typ", "JWT")  // Set the JWT type in the header
             .setClaims(extraClaims)
+
+            .setClaims(rolesClaim)
+            .setId(UUID.randomUUID().toString()) // todo: not used
+            .setAudience("cinequiltapp")
+//            .setPayload("cinequiltapp")
+
             .setSubject(userDetails.getUsername())
             .setIssuedAt(new Date(System.currentTimeMillis()))
             .setExpiration(new Date(System.currentTimeMillis() + expiration))

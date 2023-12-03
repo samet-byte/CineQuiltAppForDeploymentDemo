@@ -1,0 +1,133 @@
+
+//    public void save(MetadataRequest request) {
+//        var metadata = Metadata.builder()
+//                .id(request.getId())
+//                .title(request.getTitle())
+//                .director(request.getDirector())
+//                .releaseYear(request.getReleaseYear())
+//                .duration(request.getDuration())
+//                .posterUrl(request.getPosterUrl())
+//                .videoUrl(request.getVideoUrl())
+//                .trailerUrl(request.getTrailerUrl())
+//                .soundtrackUrl(request.getSoundtrackUrl())
+//                .build();
+//        repository.save(metadata);
+//    }
+
+
+
+Admin Controller
+
+
+//    @GetMapping
+//    @PreAuthorize("hasAuthority('admin:read')")
+//    public String get() {
+//        return "GET:: admin controller";
+//    }
+//    @PostMapping
+//    @PreAuthorize("hasAuthority('admin:create')")
+//    @Hidden
+//    public String post() {
+//        return "POST:: admin controller";
+//    }
+//    @PutMapping
+//    @PreAuthorize("hasAuthority('admin:update')")
+//    @Hidden
+//    public String put() {
+//        return "PUT:: admin controller";
+//    }
+//    @DeleteMapping
+//    @PreAuthorize("hasAuthority('admin:delete')")
+//    @Hidden
+//    public String delete() {
+//        return "DELETE:: admin controller";
+//    }
+
+
+
+Manager Controller
+
+
+//
+//    @GetMapping
+//    public String get() {
+//        return "GET:: management controller";
+//    }
+//    @PostMapping
+//    public String post() {
+//        return "POST:: management controller";
+//    }
+//    @PutMapping
+//    public String put() {
+//        return "PUT:: management controller";
+//    }
+//    @DeleteMapping
+//    public String delete() {
+//        return "DELETE:: management controller";
+//    }
+
+
+
+private String buildToken(
+          Map<String, Object> extraClaims,
+          UserDetails userDetails,
+          long expiration
+  ) {
+
+    List<String> roles = new ArrayList<>();
+    Map<String, Object> rolesClaim = new HashMap<>();
+    userDetails.getAuthorities().forEach(a -> roles.add(a.getAuthority()));
+    rolesClaim.put("roles", roles);
+
+
+    return Jwts
+            .builder()
+            .setClaims(extraClaims)
+            .setSubject(userDetails.getUsername())
+//            .setClaims(userDetails.getAuthorities()) // todo: !!
+//            .claim("authorities", userDetails.getAuthorities())  // Set authorities as a separate claim
+            .setClaims(rolesClaim)
+            .setIssuedAt(new Date(System.currentTimeMillis()))
+            .setExpiration(new Date(System.currentTimeMillis() + expiration))
+            .signWith(getSignInKey(), SignatureAlgorithm.HS256)
+            .compact();
+  }
+
+
+
+
+
+  ////// refresh token
+
+
+
+
+  public void refreshToken(
+          HttpServletRequest request,
+          HttpServletResponse response
+  ) throws IOException {
+    final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+    final String refreshToken;
+    final String usernameOrEmail;
+    if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
+      return;
+    }
+    refreshToken = authHeader.substring(7); //Bearer_ length = 7
+    usernameOrEmail = jwtService.extractUsername(refreshToken);
+    if (usernameOrEmail != null) {
+      var user = this.repository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
+              .orElseThrow();
+      if (jwtService.isTokenValid(refreshToken, user)) {
+        var accessToken = jwtService.generateToken(user);
+        revokeAllUserTokens(user);
+        saveUserToken(user, accessToken);
+        var authResponse = AuthenticationResponse.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .roles(user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList()) ///todo: roles
+                .build();
+        new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
+        ///
+
+      }
+    }
