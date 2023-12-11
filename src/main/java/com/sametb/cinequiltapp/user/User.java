@@ -1,6 +1,6 @@
 package com.sametb.cinequiltapp.user;
 
-import com.sametb.cinequiltapp.favs.Favourite;
+import com.sametb.cinequiltapp.fav.Favourite;
 import com.sametb.cinequiltapp.token.Token;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -11,10 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @Builder
@@ -48,27 +45,10 @@ public class User implements UserDetails {
   @Column(name = "role", nullable = false)
   private Role role;
 
-//  @OneToMany(mappedBy = "user")
-//  private List<Token> tokens;
-//...
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Token> tokens;
 
-//  public void addToken(Token token) {
-//    if (tokens == null) {
-//      tokens = new ArrayList<>();
-//    }
-//    tokens.add(token);
-//    token.setUser(this);
-//  }
-//
-//  public void removeToken(Token token) {
-//    if (tokens != null) {
-//      tokens.remove(token);
-//      token.setUser(null);
-//    }
-//  }
-//...
+
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -106,22 +86,22 @@ public class User implements UserDetails {
   }
 
 
-
-//  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-//  private List<UserFavourites> favorites;
-
-//  @ManyToMany(targetEntity = Metadata.class, cascade = CascadeType.ALL)
-//  private List metadata;
-
-//  @ManyToMany
+//  @ManyToMany(cascade = CascadeType.PERSIST)
 //    @JoinTable(
-//            name = "user_favourites",
+//            name = "user_metadata",
 //            joinColumns = @JoinColumn(name = "user_id"),
 //            inverseJoinColumns = @JoinColumn(name = "metadata_id"))
-//  Set<Metadata> favourites;
+//    private Set<Metadata> metadata = new HashSet<>();
 
-//  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-  @OneToMany(mappedBy = "user")
-  private List<Favourite> favourites;
+
+  @OneToMany(
+          mappedBy = "user",
+          cascade = {
+                  CascadeType.PERSIST,
+                  CascadeType.DETACH,
+                  CascadeType.REFRESH,
+          })
+  private Set<Favourite> favourites;
+
 
 }

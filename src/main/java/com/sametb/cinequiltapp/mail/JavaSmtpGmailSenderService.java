@@ -1,4 +1,4 @@
-package com.sametb.cinequiltapp;
+package com.sametb.cinequiltapp.mail;
 
 /**
  * @author Samet Bayat.

@@ -1,17 +1,19 @@
 package com.sametb.cinequiltapp.user;
 
-import com.sametb.cinequiltapp.JavaSmtpGmailSenderService;
+import com.sametb.cinequiltapp.mail.JavaSmtpGmailSenderService;
 import com.sametb.cinequiltapp._custom.SamTextFormat;
+import com.sametb.cinequiltapp.metadata.Metadata;
+import com.sametb.cinequiltapp.metadata.MetadataRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -107,8 +109,10 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Optional<User> findByUsername(String username) {
-        return repository.findByUsername(username);
+    public User findByUsername(String username) {
+//        return repository.findByUsername(username);
+        User user=  repository.findByUsername(username);
+        return user;
     }
 
     @Override
@@ -165,4 +169,62 @@ public class UserService implements IUserService {
         }
 
     }
+
+
+//    private final MetadataRepository metadataRepository;
+
+//    public void addFavorite(Integer userId, Integer metadataId) {
+//        try{
+//            User user = repository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+//            Optional<Metadata> metadata = metadataRepository.findById(metadataId);
+//
+//            SamTextFormat.Companion.create(Optional.of(metadata.get().getTitle()).orElseThrow(() -> new RuntimeException("No metadata found"))).cyan().print();
+//
+//
+//
+////            user.getUser_favs().add(metadata.orElseThrow(() -> new RuntimeException("Metadata not found")));
+////            SamTextFormat.Companion.create(Arrays.toString(user.getUser_favs().toArray())).cyan().print();
+//            repository.save(user);
+//        } catch (Exception e){
+//            e.printStackTrace();
+//        }
+//    }
+//
+//    public void deleteFavorite(Integer userId, Integer metadataId) {
+//        User user = repository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+////        user.getUser_favs().removeIf(metadata -> metadata.getId().equals(metadataId));
+////        user.getUser_favs().removeIf(metadata -> false);
+//        repository.save(user);
+//    }
+
+
+//    public void addToFavourites(Integer userId, Integer metadataId) {
+//        User user = repository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
+//        Metadata metadata = metadataRepository.findById(metadataId).orElseThrow(() -> new EntityNotFoundException("Metadata not found"));
+//
+//        user.getFavourites().add(metadata);
+//
+////        user.addFavourite(metadata);
+//
+//        repository.save(user);
+//    }
+//
+//    public Set<Metadata> getUserFavourites(Integer userId) {
+//        try {
+//            User user = repository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
+//            SamTextFormat.Companion.create(user.getFavourites().stream().map(Metadata::getTitle).toString()).cyan().print();
+//            return user.getFavourites();
+//        } catch (Exception e) {
+//            SamTextFormat.Companion.create("getUserFavourites() error: " + e.getMessage()).red().print();
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
+
+
+
+
+
+
+
 }

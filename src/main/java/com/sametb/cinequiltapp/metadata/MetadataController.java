@@ -2,7 +2,7 @@ package com.sametb.cinequiltapp.metadata;
 
 import com.sametb.cinequiltapp._custom.SamTextFormat;
 import com.sametb.cinequiltapp.exception.MetadataNotFoundException;
-import com.sametb.cinequiltapp.favs.FavouriteService;
+import com.sametb.cinequiltapp.fav.IFavService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +17,10 @@ import java.util.List;
 @RequestMapping("/api/v1/metadatas")
 @RequiredArgsConstructor
 @CrossOrigin("http://localhost:3000") //!! allowing client application with port 3000 to consume the backed
+//@CrossOrigin("*")
 public class MetadataController {
 
     private final MetadataService service;
-
-    private final FavouriteService favoritesService;
 
     //////////////////////////////////////////////////////////////////////////////////// create - insert
     @PostMapping
@@ -36,8 +35,18 @@ public class MetadataController {
 
     //////////////////////////////////////////////////////////////////////////////////// find - search
 
+//    @GetMapping
+//    public ResponseEntity<List<Metadata>> findAllMetadatas() {
+//        return ResponseEntity.ok(service.findAll());
+//    }
     @GetMapping
-    public ResponseEntity<List<Metadata>> findAllMetadatas() {
+    public ResponseEntity<List<Metadata>> findAllMetadatasBy(
+            @RequestParam(required = false) String by,
+            @RequestParam(required = false) String order
+    ) {
+        if (by != null && order != null) {
+            return ResponseEntity.ok(service.findAllBy(by, order));
+        }
         return ResponseEntity.ok(service.findAll());
     }
 
@@ -55,7 +64,7 @@ public class MetadataController {
     public ResponseEntity<Metadata> findByTitleSingle(@PathVariable String title) {
         try {
             String serachTitle = decodeString(title);
-            SamTextFormat.Companion.create("serachTitle: " + serachTitle).yellow().print();
+//            SamTextFormat.Companion.create("serachTitle: " + serachTitle).yellow().print();
             return ResponseEntity.ok(service.findByTitle(serachTitle));
         } catch (Exception e) {
             e.printStackTrace();
@@ -102,18 +111,26 @@ public class MetadataController {
 
 
 
+    private final IFavService favoritesService;
+
     //////////////////////////////////////////////////////////////////////////////////// delete - remove
-    @Transactional
+    //@Transactional
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")//todo: ADMIN
 //    @PreAuthorize("hasAuthority('admin:delete')")
     public ResponseEntity<Metadata> deleteMetadata(
             @PathVariable Integer id
     ) {
 //        Metadata deletedMetadata = service.findById(id);
 //        favoritesService.deleteFavourite(id);
-        service.deleteMetadata(id);
-        return ResponseEntity.accepted().build(); // .body(deletedMetadata); //.build();
+        try{
+            favoritesService.deleteFavouriteByMetadataId(id);
+            service.deleteMetadata(id);
+            return ResponseEntity.accepted().build(); // .body(deletedMetadata); //.build();}
+    } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.notFound().build();
+        }
     }
 
 

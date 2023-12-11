@@ -131,3 +131,350 @@ private String buildToken(
 
       }
     }
+
+
+
+//  public AuthenticationResponse refreshToken(Principal connectedUser){
+//    var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+//    if(!user.isEnabled()){
+//        throw new IllegalStateException("User not found");
+//    }
+//
+//    var jwtToken = jwtService.generateToken(user);
+//    var refreshToken = jwtService.generateRefreshToken(user);
+//    revokeAllUserTokens(user);
+//    saveUserToken(user, jwtToken);
+//    return AuthenticationResponse.builder()
+//            .accessToken(jwtToken)
+//            .refreshToken(refreshToken)
+//            .roles(user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList())
+//            .build();
+//
+//  }
+
+
+
+//  //todo: response entity?
+//  @PostMapping("/refresh-token")
+//  public void refreshToken(
+//      HttpServletRequest request,
+//      HttpServletResponse response
+//  ) throws IOException {
+//    service.refreshToken(request, response);
+//  }
+//
+//  //todo: response entity?
+//  @PostMapping("/refresh-token")
+//  public void refreshToken(
+//          HttpServletRequest request,
+//          HttpServletResponse response
+//  ) throws IOException {
+//    AuthenticationResponse responseRefresh = service.refreshToken(request, response);
+////    response.addHeader(HttpHeaders.AUTHORIZATION, "Bearer " + responseRefresh.getAccessToken());
+//    return ResponseEntity.ok(responseRefresh);
+//  }
+
+
+//  @Deprecated
+//  @PostMapping("/refresh-token")
+//  public void refreshToken1(
+//          HttpServletRequest request,
+//          HttpServletResponse response
+//  ) throws IOException {
+//    service.refreshToken1(request, response);
+//  }
+
+
+  //log-out ???????
+
+
+
+  @PostMapping("/authenticate")
+  public ResponseEntity<AuthenticationResponse> authenticate(
+//      @RequestParam(required = false) String emailOrUsername,
+//      @RequestParam(required = false) String password,
+//      @RequestBody(required = false)
+      AuthenticationRequest request,
+        HttpServletResponse response
+  ) {
+//
+//    if (request == null) {
+//        request = AuthenticationRequest.builder()
+//                .emailOrUsername(emailOrUsername)
+//                .password(password)
+//                .build();
+//    }
+
+      AuthenticationResponse authenticationResponse = service.authenticate(request);
+
+
+    Cookie cookie = new Cookie("refreshToken", authenticationResponse.getRefreshToken());
+//    cookie.setHttpOnly(true); // This makes the cookie accessible only through the HTTP protocol
+    cookie.setMaxAge(7 * 24 * 60 * 60); // Set the expiration time in seconds (adjust as needed)
+    cookie.setPath("/"); // Set the cookie path (adjust as needed)
+    response.addCookie(cookie);
+    return ResponseEntity.ok(authenticationResponse);
+  }
+
+
+  refresh
+  //response entitiy
+
+
+//
+//    @GetMapping("/favs")
+//    public ResponseEntity<List<UserFavourites>> getAllUserFavourites() {
+//        return ResponseEntity.ok(userFavoritesService.getAllUserFavorites());
+//    }
+//
+//
+//    @PostMapping("/favs")
+//    public UserFavourites saveUserFavourites(@RequestBody UserFavourites UserFavourites) {
+//        return userFavoritesService.saveUserFavorites(UserFavourites);
+//    }
+
+
+
+//    private final MetadataService metadataService;
+
+//    @PostMapping("/{userId}/addFavorite/{metadataId}")
+//    public void addFavorite(@PathVariable Integer userId, @PathVariable Integer metadataId) {
+////        Metadata metadata = metadataService.findById(metadataId);
+//        service.addFavorite(userId, metadataId);
+//    }
+//
+//    @DeleteMapping("/{userId}/deleteFavorite/{metadataId}")
+//    public void deleteFavorite(@PathVariable Integer userId, @PathVariable Integer metadataId) {
+//        service.deleteFavorite(userId, metadataId);
+//    }
+//
+
+
+//    @PostMapping("/fav")
+//    public ResponseEntity<String> addToFavourites(@RequestParam Integer userId, @RequestParam Integer metadataId) {
+//        service.addToFavourites(userId, metadataId);
+//        return ResponseEntity.ok("Added to favourites successfully");
+//    }
+//
+//    @GetMapping("/fav/{userId}")
+//    public ResponseEntity<Set<Metadata>> getUserFavourites(@PathVariable Integer userId) {
+//        try{
+//            Set<Metadata> favourites = service.getUserFavourites(userId);
+//            return ResponseEntity.ok(favourites);
+//        }catch (Exception e){
+//            e.printStackTrace();
+//            return ResponseEntity.badRequest().build();
+//        }
+//    }
+
+
+
+
+
+//    public Optional<Metadata> updateMetadataById(Integer id, Metadata updatedMetadata) {
+//        if (updatedMetadata == null || id == null || repository.findById(id).isEmpty()) {
+//            return Optional.empty();
+//        }
+//
+//        Metadata uMetadata = repository.findById(id).orElseThrow();
+//        if (updatedMetadata.getTitle() != null && !updatedMetadata.getTitle().equals(uMetadata.getTitle())) { uMetadata.setTitle(updatedMetadata.getTitle()); }
+//        if (updatedMetadata.getDirector() != null && !updatedMetadata.getDirector().equals(uMetadata.getDirector())) { uMetadata.setDirector(updatedMetadata.getDirector()); }
+//        if (updatedMetadata.getReleaseYear() != 0 && updatedMetadata.getReleaseYear() != uMetadata.getReleaseYear()) { uMetadata.setReleaseYear(updatedMetadata.getReleaseYear()); }
+//        if (updatedMetadata.getDuration() != 0 && updatedMetadata.getDuration() != uMetadata.getDuration()) { uMetadata.setDuration(updatedMetadata.getDuration()); }
+//        if (updatedMetadata.getPosterUrl() != null && !updatedMetadata.getPosterUrl().equals(uMetadata.getPosterUrl())) { uMetadata.setPosterUrl(updatedMetadata.getPosterUrl()); }
+//        if (updatedMetadata.getVideoUrl() != null && !updatedMetadata.getVideoUrl().equals(uMetadata.getVideoUrl())) { uMetadata.setVideoUrl(updatedMetadata.getVideoUrl()); }
+//        if (updatedMetadata.getTrailerUrl() != null && !updatedMetadata.getTrailerUrl().equals(uMetadata.getTrailerUrl())) { uMetadata.setTrailerUrl(updatedMetadata.getTrailerUrl()); }
+//        if (updatedMetadata.getSoundtrackUrl() != null && !updatedMetadata.getSoundtrackUrl().equals(uMetadata.getSoundtrackUrl())) { uMetadata.setSoundtrackUrl(updatedMetadata.getSoundtrackUrl()); }
+//
+//        repository.findById(id).map(existingMetadata -> {
+////            if (
+////                    if (updatedMetadata.getTitle() != null && !updatedMetadata.getTitle().equals(existingMetadata.getTitle()))
+////
+////                    (updatedMetadata.getDirector() != null && !updatedMetadata.getDirector().equals(existingMetadata.getDirector()))
+////                    ||
+////                    (updatedMetadata.getReleaseYear() != 0 && updatedMetadata.getReleaseYear() != existingMetadata.getReleaseYear())
+////                    ||
+////                    (updatedMetadata.getDuration() != 0 && updatedMetadata.getDuration() != existingMetadata.getDuration())
+////                    ||
+////                    (updatedMetadata.getPosterUrl() != null && !updatedMetadata.getPosterUrl().equals(existingMetadata.getPosterUrl()))
+////                    ||
+////                    (updatedMetadata.getVideoUrl() != null && !updatedMetadata.getVideoUrl().equals(existingMetadata.getVideoUrl()))
+////                    ||
+////                    (updatedMetadata.getTrailerUrl() != null && !updatedMetadata.getTrailerUrl().equals(existingMetadata.getTrailerUrl()))
+////                    ||
+////                    (updatedMetadata.getSoundtrackUrl() != null && !updatedMetadata.getSoundtrackUrl().equals(existingMetadata.getSoundtrackUrl()))
+////
+////            )
+//            {
+//                existingMetadata.setTitle(updatedMetadata.getTitle());
+//                existingMetadata.setDirector(updatedMetadata.getDirector());
+//                // Update other fields as needed
+//
+//                // The save method is used to save the updated entity back to the database
+//                return repository.save(existingMetadata);
+//            } else {
+//                return existingMetadata;
+//            }
+//        });
+//
+
+
+
+
+//  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+//  private List<UserFavourites> favorites;
+
+//  @ManyToMany(targetEntity = Metadata.class, cascade = CascadeType.ALL)
+//  private List metadata;
+
+//  @ManyToMany
+//    @JoinTable(
+//            name = "user_favourites",
+//            joinColumns = @JoinColumn(name = "user_id"),
+//            inverseJoinColumns = @JoinColumn(name = "metadata_id"))
+//  Set<Metadata> favourites;
+
+//  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+//  @OneToMany(mappedBy = "user")
+//  private List<Favourite> favourites;
+
+  //fetch = FetchType.LAZY,
+//  @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//  @JoinTable(
+//          name = "user_favourites",
+//          joinColumns = @JoinColumn(name = "user_id"),
+//          inverseJoinColumns = @JoinColumn(name = "metadata_id")
+//  )
+//  private Set<Metadata> user_favs = new HashSet<>();
+
+
+//  @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+//  private Set<Metadata> favs;
+
+//  @ManyToMany
+//  @JoinTable(
+//          name = "user_favourites",
+//          joinColumns = @JoinColumn(name = "user_id"),
+//          inverseJoinColumns = {
+//                  @JoinColumn(name = "metadata_id"),
+////                  @JoinColumn(name = "metadata_title")
+//          }
+//  )
+//  Set<Metadata> favourites;
+//
+//  void addFavourite(Metadata metadata) {
+//      favourites.add(metadata);
+//      metadata.getFavedUsers().add(this);
+//  }
+//
+//  void removeFavourite(Metadata metadata) {
+//      favourites.remove(metadata);
+//      metadata.getFavedUsers().remove(this);
+//  }
+
+//  @OneToMany(mappedBy = "user")
+//  private List<Token> tokens;
+//...
+//  public void addToken(Token token) {
+//    if (tokens == null) {
+//      tokens = new ArrayList<>();
+//    }
+//    tokens.add(token);
+//    token.setUser(this);
+//  }
+//
+//  public void removeToken(Token token) {
+//    if (tokens != null) {
+//      tokens.remove(token);
+//      token.setUser(null);
+//    }
+//  }
+//...
+
+
+
+
+//  public void refreshToken1(
+//          HttpServletRequest request,
+//          HttpServletResponse response
+//  ) throws IOException {
+//    final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+//    final String refreshToken;
+//    final String userEmail;
+//    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+//      return;
+//    }
+//    refreshToken = authHeader.substring(7);
+//    userEmail = jwtService.extractUsername(refreshToken);
+//    if (userEmail != null) {
+//      var user = this.repository.findByEmail(userEmail)
+//              .orElseThrow();
+//      if (jwtService.isTokenValid(refreshToken, user)) {
+//        var accessToken = jwtService.generateToken(user);
+//        revokeAllUserTokens(user);
+//        saveUserToken(user, accessToken);
+//        var authResponse = AuthenticationResponse.builder()
+//                .accessToken(accessToken)
+//                .refreshToken(refreshToken)
+//                .roles(user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList()) ///todo: roles
+//                .build();
+//        new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
+//      }
+//    }
+//  }
+
+
+
+
+//    Enumeration<String> headerNames = request.getHeaderNames();
+//    while (headerNames.hasMoreElements()) {
+//      String header = headerNames.nextElement();
+//      SamTextFormat.Companion.create("header: " + header
+////              + " -> " + request.getHeader(header)
+//      ).red().bold().print();
+//    }
+//
+
+
+
+//    @OneToMany(mappedBy = "metadata", cascade = CascadeType.ALL)
+//    private List<UserFavourites> favorites;
+
+
+//    @ManyToMany(mappedBy = "metadata", cascade = CascadeType.REMOVE) //, cascade = CascadeType.REMOVE, orphanRemoval = true)
+//    Set<Favourite> favourites;
+
+//
+//    @ManyToMany(mappedBy = "favourites", cascade = CascadeType.ALL)
+//    private Set<User> favedByUsers = new HashSet<User>();
+
+//    @ManyToMany(mappedBy = "user_favs", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    private Set<User> favourites = new HashSet<>();
+
+
+//    @OneToMany(mappedBy = "metadata", cascade = CascadeType.ALL, orphanRemoval = true)
+//    private Set<User> favedUsers;
+
+//    @JsonIgnore
+//    @ManyToMany(mappedBy = "favourites", cascade = CascadeType.ALL)
+//    Set<User> favedUsers;
+//
+//
+//    void addFavedUser(User user) {
+//        favedUsers.add(user);
+//        user.getFavourites().add(this);
+//    }
+//
+//    void removeFavedUser(User user) {
+//        favedUsers.remove(user);
+//        user.getFavourites().remove(this);
+//    }
+
+
+//    @Column(name = "price", nullable = false, columnDefinition = "DECIMAL(10, 2) DEFAULT 0.00")
+//    private double price;
+
+//    @Column(name = "create_time", nullable = false)
+//    private String createTime;
+
+//, nullable = true, columnDefinition = "VARCHAR(255) DEFAULT 'N/A'")

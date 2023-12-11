@@ -27,7 +27,7 @@ public class LogoutService implements LogoutHandler {
     if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
       return;
     }
-    SamTextFormat.Companion.create(authentication.getName()).cyan().print();
+//    SamTextFormat.Companion.create(authentication.getName()).cyan().print();
     jwt = authHeader.substring(7);
     var storedToken = tokenRepository.findByToken(jwt)
         .orElse(null);

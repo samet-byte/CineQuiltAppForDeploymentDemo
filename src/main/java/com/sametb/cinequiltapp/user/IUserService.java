@@ -11,7 +11,8 @@ public interface IUserService {
 
     Optional<User> makeAdmin(String username);
 
-    Optional<User> findByUsername(String username);
+//    Optional<User> findByUsername(String username);
+    User findByUsername(String username);
 
     Optional<User> findByUsernameOrEmail(String username, String email);
 

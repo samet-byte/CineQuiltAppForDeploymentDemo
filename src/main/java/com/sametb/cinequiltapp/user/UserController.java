@@ -1,7 +1,7 @@
 package com.sametb.cinequiltapp.user;
 
 
-import com.sametb.cinequiltapp.favs.FavouriteService;
+import com.sametb.cinequiltapp._custom.SamTextFormat;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,21 +20,6 @@ public class UserController {
 
     private final UserService service;
 
-    private final FavouriteService userFavoritesService;
-
-//
-//    @GetMapping("/favs")
-//    public ResponseEntity<List<UserFavourites>> getAllUserFavourites() {
-//        return ResponseEntity.ok(userFavoritesService.getAllUserFavorites());
-//    }
-//
-//
-//    @PostMapping("/favs")
-//    public UserFavourites saveUserFavourites(@RequestBody UserFavourites UserFavourites) {
-//        return userFavoritesService.saveUserFavorites(UserFavourites);
-//    }
-
-
     @GetMapping //todo: principal?
     public ResponseEntity<?> findByUsernameOrEmail(
             Principal connectedUser
@@ -44,6 +29,23 @@ public class UserController {
         return ResponseEntity.ok().body(user);
     }
 
+    @GetMapping("/{username}")
+    public ResponseEntity<?> findByUsername(
+            @PathVariable String username
+    ) {
+        UserDTO user = UserDTO.fromUser(service.findByUsername(username));
+        return ResponseEntity.ok().body(user);
+    }
+
+    @GetMapping("/id/{id}")
+    public ResponseEntity<?> findById(
+            @PathVariable Integer id
+    ) {
+        UserDTO user = UserDTO.fromUser(service.findByIDNonOptional(id));
+        return ResponseEntity.ok().body(user);
+    }
+
+
    @GetMapping("/all")
    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<UserDTO>> findAll(
@@ -52,7 +54,7 @@ public class UserController {
         try {
             return ResponseEntity.ok().body(service.findAllDTO());
         } catch (Exception e) {
-            e.printStackTrace();
+            SamTextFormat.Companion.create(e.getMessage()).red().print();
         }
         return null;
    }

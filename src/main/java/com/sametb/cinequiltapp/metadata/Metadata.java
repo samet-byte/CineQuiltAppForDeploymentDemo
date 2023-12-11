@@ -1,7 +1,8 @@
 package com.sametb.cinequiltapp.metadata;
 
 
-import com.sametb.cinequiltapp.favs.Favourite;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sametb.cinequiltapp.fav.Favourite;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +15,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 @Data
@@ -33,32 +33,30 @@ public class Metadata {
     @Column(name = "title", nullable = false) // length = 255 default
     private String title;
 
-    @Column(name = "director")//, nullable = true, columnDefinition = "VARCHAR(255) DEFAULT 'N/A'")
+    @Column(name = "director")
     private String director;
 
-    @Column(name = "release_year")//, nullable = true, columnDefinition = "INT DEFAULT -1")
+    @Column(name = "release_year")
     private int releaseYear;
 
-    @Column(name = "duration")//, nullable = true, columnDefinition = "VARCHAR(255) DEFAULT 'N/A'")
+    @Column(name = "duration")
     private int duration;
 
-    @Column(name = "poster_url")//)//, nullable = true, columnDefinition = "VARCHAR(255) DEFAULT 'https://sametb.com/no-content.jpg'")
+    @Column(name = "genre")
+    private String genre;
+
+    @Column(name = "poster_url")
     private String posterUrl;
 
-    @Column(name = "video_url")//, nullable = true, columnDefinition = "VARCHAR(255) DEFAULT 'https://sametb.com/no-content.mp4'")
+    @Column(name = "video_url")
     private String videoUrl;
 
-    @Column(name = "trailer_url", nullable = true) //, columnDefinition = "VARCHAR(255) DEFAULT 'https://sametb.com/no-content.mp4'")
+    @Column(name = "trailer_url", nullable = true)
     private String trailerUrl;
 
     @Column(name = "soundtrack_url", nullable = true)
     private String soundtrackUrl;
 
-//    @Column(name = "price", nullable = false, columnDefinition = "DECIMAL(10, 2) DEFAULT 0.00")
-//    private double price;
-
-//    @Column(name = "create_time", nullable = false)
-//    private String createTime;
 
     // for logging, sorting and possible lawsuits :|
     @CreatedDate
@@ -78,12 +76,41 @@ public class Metadata {
     @Column(insertable = false)
     private Integer lastModifiedBy;
 
+    @Column(name = "description", nullable = true, length = 1000)
+    private String description;
 
 
-//    @OneToMany(mappedBy = "metadata", cascade = CascadeType.ALL)
-//    private List<UserFavourites> favorites;
+    @Column(name = "type", nullable = true)  // ENUM 1-> Series, 2-> ..logy
+    @Enumerated(EnumType.STRING)
+    private RelationType type;
+//
+//    @Column(name = "episode_number")
+//    private int episodeNumber;
+//
+//    @Column(name = "season_number")
+//    private int seasonNumber;
+
+    // todo: description, genre, etc.
+
+    @JsonIgnore
+    @OneToMany(
+            mappedBy = "metadata",
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.DETACH,
+                    CascadeType.REFRESH,
+            })
+    private Set<Favourite> favourites;
 
 
-    @OneToMany(mappedBy = "metadata", cascade = CascadeType.ALL) //, cascade = CascadeType.REMOVE, orphanRemoval = true)
-    Set<Favourite> favourites;
+    @JsonIgnore
+    @OneToMany(
+            mappedBy = "metadata",
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.DETACH,
+                    CascadeType.REFRESH,
+            })
+    private Set<Series> series;
+
 }

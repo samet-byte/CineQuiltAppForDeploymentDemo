@@ -13,7 +13,7 @@ public interface MetadataRepository extends JpaRepository<Metadata, Integer> {
 //    @Modifying
 
     @Override
-    Optional<Metadata> findById(Integer integer);
+    Optional<Metadata> findById(Integer id);
 
     Optional<Metadata> findByTitleIgnoreCase(String title);
 
@@ -38,10 +38,40 @@ public interface MetadataRepository extends JpaRepository<Metadata, Integer> {
     Optional<Metadata> findByTitle(String title);
 
 
+    //Expecting a SELECT query : `DELETE FROM Metadata m WHERE m.id = :id`
+
+    @Query("DELETE FROM Metadata m WHERE m.id = :id")
+    void customDelete(Integer id);
+
+
+    void deleteByTitle(String title);
 
 
 //    Optional<Metadata> findByGenre(String genre);
 //    Optional<Metadata> findByRating(String rating);
+
+
+    // SORTING
+    @Query("SELECT m FROM Metadata m ORDER BY m.title ASC, m.director ASC, m.releaseYear ASC, m.duration ASC")
+    List<Metadata> findAllOrderByTitleAsc();
+
+    @Query("SELECT m FROM Metadata m ORDER BY m.title DESC, m.director ASC, m.releaseYear ASC, m.duration ASC")
+    List<Metadata> findAllOrderByTitleDesc();
+
+    @Query("SELECT m FROM Metadata m ORDER BY m.director ASC, m.title ASC, m.releaseYear ASC, m.duration ASC")
+    List<Metadata> findAllOrderByDirectorAsc();
+    @Query("SELECT m FROM Metadata m ORDER BY m.director DESC, m.title ASC, m.releaseYear ASC, m.duration ASC")
+    List<Metadata> findAllOrderByDirectorDesc();
+
+    @Query("SELECT m FROM Metadata m ORDER BY m.releaseYear ASC, m.title ASC, m.director ASC, m.duration ASC")
+    List<Metadata> findAllOrderByYearAsc();
+    @Query("SELECT m FROM Metadata m ORDER BY m.releaseYear DESC, m.title ASC, m.director ASC, m.duration ASC")
+    List<Metadata> findAllOrderByYearDesc();
+
+    @Query("SELECT m FROM Metadata m ORDER BY m.duration ASC, m.title ASC, m.director ASC, m.releaseYear ASC")
+    List<Metadata> findAllOrderByDurationAsc();
+    @Query("SELECT m FROM Metadata m ORDER BY m.duration DESC, m.title ASC, m.director ASC, m.releaseYear ASC")
+    List<Metadata> findAllOrderByDurationDesc();
 
 
 }

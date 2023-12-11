@@ -2,6 +2,7 @@ package com.sametb.cinequiltapp._custom
 
 class SamTextFormat private constructor(private val text: String) {
 
+
     companion object {
 
         private const val ANSI_RESET            = "\u001B[0m"
@@ -17,6 +18,7 @@ class SamTextFormat private constructor(private val text: String) {
         private const val ANSI_COLOR_CYAN       = "\u001B[36m"
         private const val ANSI_COLOR_WHITE      = "\u001B[37m"
 
+        fun errorMessage(text: String) { println("$ANSI_COLOR_RED$ANSI_BOLD$text$ANSI_RESET") }
         fun create(text: String): SamTextFormat { return SamTextFormat(text) }
     }
 
@@ -47,4 +49,5 @@ class SamTextFormat private constructor(private val text: String) {
     override fun toString(): String { return "$text$ANSI_RESET" }
 
     fun print() { println("$text$ANSI_RESET") }
+
 }

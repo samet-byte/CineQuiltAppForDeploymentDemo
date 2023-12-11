@@ -13,6 +13,7 @@ import com.sametb.cinequiltapp.user.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -50,9 +51,14 @@ public class AuthenticationService {
     var refreshToken = jwtService.generateRefreshToken(user);
     saveUserToken(savedUser, jwtToken);
     return AuthenticationResponse.builder()
-        .accessToken(jwtToken)
+            .accessToken(jwtToken)
             .refreshToken(refreshToken)
-        .build();
+
+            .country(request.getCountry())
+            .username(request.getUsername())
+            .email(request.getEmail())
+
+            .build();
   }
 
   public AuthenticationResponse authenticate(AuthenticationRequest request) {
@@ -72,6 +78,10 @@ public class AuthenticationService {
         .accessToken(jwtToken)
             .refreshToken(refreshToken)
             .roles(user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList())
+            .userId(user.getId())
+            .country(user.getCountry())
+            .username(user.getUsername())
+            .email(user.getEmail())
         .build();
   }
 
@@ -98,38 +108,11 @@ public class AuthenticationService {
   }
 
 
-//  public AuthenticationResponse refreshToken(Principal connectedUser){
-//    var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
-//    if(!user.isEnabled()){
-//        throw new IllegalStateException("User not found");
-//    }
-//
-//    var jwtToken = jwtService.generateToken(user);
-//    var refreshToken = jwtService.generateRefreshToken(user);
-//    revokeAllUserTokens(user);
-//    saveUserToken(user, jwtToken);
-//    return AuthenticationResponse.builder()
-//            .accessToken(jwtToken)
-//            .refreshToken(refreshToken)
-//            .roles(user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList())
-//            .build();
-//
-//  }
-
-
 
   public AuthenticationResponse refreshToken(
-          HttpServletRequest request
+          @NotNull HttpServletRequest request
 //          , HttpServletResponse response
   ) throws IOException {
-
-    Enumeration<String> headerNames = request.getHeaderNames();
-    while (headerNames.hasMoreElements()) {
-      String header = headerNames.nextElement();
-      SamTextFormat.Companion.create("header: " + header
-//              + " -> " + request.getHeader(header)
-      ).red().bold().print();
-    }
 
 
     final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
@@ -139,7 +122,7 @@ public class AuthenticationService {
     if (authHeader == null
             ||
             !authHeader.startsWith("Bearer ")) {
-      SamTextFormat.Companion.create("refreshToken: authHeader == null || !authHeader.startsWith(\"Bearer \")").red().bold().print();
+//      SamTextFormat.Companion.create("refreshToken: authHeader == null || !authHeader.startsWith(\"Bearer \")").red().bold().print();
     }
     refreshToken = authHeader.substring(7); //Bearer_ length = 7
     usernameOrEmail = jwtService.extractUsername(refreshToken);
@@ -154,6 +137,10 @@ public class AuthenticationService {
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .roles(user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList()) ///todo: roles
+                .userId(user.getId())
+                .country(user.getCountry())
+                .username(user.getUsername())
+                .email(user.getEmail())
                 .build();
 //        new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
         ///
@@ -164,34 +151,4 @@ public class AuthenticationService {
     return null;
   }
 
-
-
-  public void refreshToken1(
-          HttpServletRequest request,
-          HttpServletResponse response
-  ) throws IOException {
-    final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-    final String refreshToken;
-    final String userEmail;
-    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-      return;
-    }
-    refreshToken = authHeader.substring(7);
-    userEmail = jwtService.extractUsername(refreshToken);
-    if (userEmail != null) {
-      var user = this.repository.findByEmail(userEmail)
-              .orElseThrow();
-      if (jwtService.isTokenValid(refreshToken, user)) {
-        var accessToken = jwtService.generateToken(user);
-        revokeAllUserTokens(user);
-        saveUserToken(user, accessToken);
-        var authResponse = AuthenticationResponse.builder()
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .roles(user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList()) ///todo: roles
-                .build();
-        new ObjectMapper().writeValue(response.getOutputStream(), authResponse);
-      }
-    }
-  }
 }

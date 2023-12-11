@@ -1,6 +1,10 @@
 package com.sametb.cinequiltapp.user;
 
-import com.sametb.cinequiltapp.favs.Favourite;
+import com.sametb.cinequiltapp.fav.FavRepository;
+import com.sametb.cinequiltapp.fav.FavResponse;
+import com.sametb.cinequiltapp.fav.FavService;
+import com.sametb.cinequiltapp.fav.IFavService;
+import com.sametb.cinequiltapp.metadata.Metadata;
 import com.sametb.cinequiltapp.token.Token;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,6 +16,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author Samet Bayat.
@@ -35,10 +40,15 @@ public class UserDTO {
 //    private Collection<? extends GrantedAuthority> authorities;
     private List<String> authorities;
 
+//    private List<String> favorites;
+
     // Omitting tokens collection
     private LocalDateTime currentTimestamp;
 
-//    private List<Favourite> favourites;
+
+    private List<FavResponse> favourites;
+
+//    private List<UserFavInfo> favourites;
 
     public static UserDTO fromUser(User user) {
 
@@ -54,6 +64,12 @@ public class UserDTO {
         // Omitting tokens collection
 //        userDTO.setFavourites(user.getFavourites());
 
+//        userDTO.setFavorites(user.getUser_favs().stream().map());
+//        userDTO.setFavorites(user.getUser_favs().stream().map(Metadata::getTitle).toList());
+
+//        userDTO.setFavourites(UserFavInfo.fromUser(user));
+
+
 
         return userDTO;
     }
@@ -61,4 +77,7 @@ public class UserDTO {
     public static List<UserDTO> fromUsers(List<User> users) {
         return users.stream().map(UserDTO::fromUser).toList();
     }
+
+
+
 }

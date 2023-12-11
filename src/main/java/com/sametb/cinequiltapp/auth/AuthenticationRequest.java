@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 public class AuthenticationRequest {
   //todo: change to usernameOrPassword
   private String emailOrUsername;
-  String password;
+  private String password;
 }

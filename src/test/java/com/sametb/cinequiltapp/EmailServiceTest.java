@@ -1,5 +1,6 @@
 package com.sametb.cinequiltapp;
 
+import com.sametb.cinequiltapp.mail.JavaSmtpGmailSenderService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,8 @@ public class EmailServiceTest {
 
     @Test
     public void testSendEmailWithImageAndLink() {
-        String toEmail = "samaudiobook@gmail.com";
+//        String toEmail = "samaudiobook@gmail.com";
+        String toEmail = "85esgul@gmail.com";
         String subject = "Let the cinematic warmth wrap you!";
         String body = "";
         String imagePath = "src/main/assets/rose_pedal_heart.png";

@@ -14,6 +14,8 @@ public class MetadataRequest {
     private String director;
     private int releaseYear;
     private int duration;
+    private String genre;
+    private String description;
     private String posterUrl;
     private String videoUrl;
     private String trailerUrl;

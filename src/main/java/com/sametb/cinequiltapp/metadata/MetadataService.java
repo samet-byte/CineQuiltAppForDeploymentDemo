@@ -1,12 +1,15 @@
 package com.sametb.cinequiltapp.metadata;
 
+import com.sametb.cinequiltapp._custom.SamTextFormat;
 import com.sametb.cinequiltapp.exception.MetadataAlreadyExistsException;
 import com.sametb.cinequiltapp.exception.MetadataNotFoundException;
+import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
@@ -38,9 +41,12 @@ public class MetadataService implements IMetadataService {
                     .releaseYear(Optional.of(request.getReleaseYear()).orElse(0))
                     .duration(Optional.of(request.getDuration()).orElse(0))
                     .posterUrl(Optional.ofNullable(request.getPosterUrl()).orElse("https://sametb.com/no-content.jpg"))
-                    .videoUrl(Optional.ofNullable(request.getVideoUrl()).orElse("https://sametb.com/no-content.mp4"))
+//                    .videoUrl(Optional.ofNullable(request.getVideoUrl()).orElse("https://sametb.com/no-content.mp4"))
+                    .videoUrl(request.getVideoUrl())
                     .trailerUrl(request.getTrailerUrl())
                     .soundtrackUrl(request.getSoundtrackUrl())
+                    .description(request.getDescription())
+                    .genre(request.getGenre())
                     .build();
             repository.save(metadata);
             return metadata;
@@ -48,12 +54,49 @@ public class MetadataService implements IMetadataService {
     }
 
 
-    public List<Metadata> findAll() {
-        return repository.findAll();
+    public List<Metadata> findAll() { return repository.findAll(); }
+
+    public List<Metadata> findAllBy(@Nullable String by, @Nullable String order) {
+        if (by == null || order == null) {
+            return repository.findAll();
+        } else if (by.equals("title") && order.equals("asc")) {
+            return repository.findAllOrderByTitleAsc();
+        } else if (by.equals("title") && order.equals("desc")) {
+            return repository.findAllOrderByTitleDesc();
+        } else if (by.equals("duration") && order.equals("asc")) {
+            return repository.findAllOrderByDurationAsc();
+        } else if (by.equals("duration") && order.equals("desc")) {
+            return repository.findAllOrderByDurationDesc();
+        } else if (by.equals("releaseYear") && order.equals("asc")) {
+            return repository.findAllOrderByYearAsc();
+        } else if (by.equals("releaseYear") && order.equals("desc")) {
+            return repository.findAllOrderByYearDesc();
+        } else if (by.equals("director") && order.equals("asc")) {
+            return repository.findAllOrderByDirectorAsc();
+        } else if (by.equals("director") && order.equals("desc")) {
+            return repository.findAllOrderByDirectorDesc();
+        } else {
+            return repository.findAll();
+        }
     }
 
+
+    @Transactional
     public void deleteMetadata(Integer id) {
-        repository.deleteById(id);
+        try{
+            SamTextFormat.Companion.create("del s.").cyan().print();
+            SamTextFormat.Companion.create(
+                    repository.getById(id).getTitle()
+            ).yellow().print();
+//            repository.deleteById(id); // todo: stg is wrong
+//            repository.customDelete(id); // todo: stg is wrong
+            repository.deleteByTitle(
+                    repository.getById(id).getTitle()
+            );
+
+        }catch (Exception e){
+            SamTextFormat.Companion.errorMessage(e.getMessage());
+        }
     }
 
     @Override
@@ -136,54 +179,3 @@ public class MetadataService implements IMetadataService {
         return emptyNames.toArray(result);
     }
 }
-
-
-
-
-
-//    public Optional<Metadata> updateMetadataById(Integer id, Metadata updatedMetadata) {
-//        if (updatedMetadata == null || id == null || repository.findById(id).isEmpty()) {
-//            return Optional.empty();
-//        }
-//
-//        Metadata uMetadata = repository.findById(id).orElseThrow();
-//        if (updatedMetadata.getTitle() != null && !updatedMetadata.getTitle().equals(uMetadata.getTitle())) { uMetadata.setTitle(updatedMetadata.getTitle()); }
-//        if (updatedMetadata.getDirector() != null && !updatedMetadata.getDirector().equals(uMetadata.getDirector())) { uMetadata.setDirector(updatedMetadata.getDirector()); }
-//        if (updatedMetadata.getReleaseYear() != 0 && updatedMetadata.getReleaseYear() != uMetadata.getReleaseYear()) { uMetadata.setReleaseYear(updatedMetadata.getReleaseYear()); }
-//        if (updatedMetadata.getDuration() != 0 && updatedMetadata.getDuration() != uMetadata.getDuration()) { uMetadata.setDuration(updatedMetadata.getDuration()); }
-//        if (updatedMetadata.getPosterUrl() != null && !updatedMetadata.getPosterUrl().equals(uMetadata.getPosterUrl())) { uMetadata.setPosterUrl(updatedMetadata.getPosterUrl()); }
-//        if (updatedMetadata.getVideoUrl() != null && !updatedMetadata.getVideoUrl().equals(uMetadata.getVideoUrl())) { uMetadata.setVideoUrl(updatedMetadata.getVideoUrl()); }
-//        if (updatedMetadata.getTrailerUrl() != null && !updatedMetadata.getTrailerUrl().equals(uMetadata.getTrailerUrl())) { uMetadata.setTrailerUrl(updatedMetadata.getTrailerUrl()); }
-//        if (updatedMetadata.getSoundtrackUrl() != null && !updatedMetadata.getSoundtrackUrl().equals(uMetadata.getSoundtrackUrl())) { uMetadata.setSoundtrackUrl(updatedMetadata.getSoundtrackUrl()); }
-//
-//        repository.findById(id).map(existingMetadata -> {
-////            if (
-////                    if (updatedMetadata.getTitle() != null && !updatedMetadata.getTitle().equals(existingMetadata.getTitle()))
-////
-////                    (updatedMetadata.getDirector() != null && !updatedMetadata.getDirector().equals(existingMetadata.getDirector()))
-////                    ||
-////                    (updatedMetadata.getReleaseYear() != 0 && updatedMetadata.getReleaseYear() != existingMetadata.getReleaseYear())
-////                    ||
-////                    (updatedMetadata.getDuration() != 0 && updatedMetadata.getDuration() != existingMetadata.getDuration())
-////                    ||
-////                    (updatedMetadata.getPosterUrl() != null && !updatedMetadata.getPosterUrl().equals(existingMetadata.getPosterUrl()))
-////                    ||
-////                    (updatedMetadata.getVideoUrl() != null && !updatedMetadata.getVideoUrl().equals(existingMetadata.getVideoUrl()))
-////                    ||
-////                    (updatedMetadata.getTrailerUrl() != null && !updatedMetadata.getTrailerUrl().equals(existingMetadata.getTrailerUrl()))
-////                    ||
-////                    (updatedMetadata.getSoundtrackUrl() != null && !updatedMetadata.getSoundtrackUrl().equals(existingMetadata.getSoundtrackUrl()))
-////
-////            )
-//            {
-//                existingMetadata.setTitle(updatedMetadata.getTitle());
-//                existingMetadata.setDirector(updatedMetadata.getDirector());
-//                // Update other fields as needed
-//
-//                // The save method is used to save the updated entity back to the database
-//                return repository.save(existingMetadata);
-//            } else {
-//                return existingMetadata;
-//            }
-//        });
-//    }
