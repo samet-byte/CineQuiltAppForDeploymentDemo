@@ -40,13 +40,8 @@ public class UserDTO {
 //    private Collection<? extends GrantedAuthority> authorities;
     private List<String> authorities;
 
-//    private List<String> favorites;
-
     // Omitting tokens collection
     private LocalDateTime currentTimestamp;
-
-
-    private List<FavResponse> favourites;
 
 //    private List<UserFavInfo> favourites;
 
@@ -61,15 +56,8 @@ public class UserDTO {
         userDTO.setCreateTime(user.getCreateTime());
         userDTO.setRole(user.getRole());
         userDTO.setAuthorities(user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList());
+//        userDTO.setFavourites(favService.getAllByUserId(us));
         // Omitting tokens collection
-//        userDTO.setFavourites(user.getFavourites());
-
-//        userDTO.setFavorites(user.getUser_favs().stream().map());
-//        userDTO.setFavorites(user.getUser_favs().stream().map(Metadata::getTitle).toList());
-
-//        userDTO.setFavourites(UserFavInfo.fromUser(user));
-
-
 
         return userDTO;
     }

@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Builder
@@ -20,6 +22,8 @@ public class MetadataRequest {
     private String videoUrl;
     private String trailerUrl;
     private String soundtrackUrl;
-
+    private RelationType type;
+    private Integer season;
+    private Integer episode;
 
 }

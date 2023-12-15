@@ -1,6 +1,8 @@
 package com.sametb.cinequiltapp.metadata;
 
+import lombok.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Meta;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -12,8 +14,11 @@ public interface MetadataRepository extends JpaRepository<Metadata, Integer> {
 
 //    @Modifying
 
-    @Override
     Optional<Metadata> findById(Integer id);
+
+    Optional<Metadata> getMetadataById(Integer id);
+
+    void deleteById(@NonNull Integer id);
 
     Optional<Metadata> findByTitleIgnoreCase(String title);
 

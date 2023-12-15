@@ -124,6 +124,8 @@ public class MetadataController {
 //        Metadata deletedMetadata = service.findById(id);
 //        favoritesService.deleteFavourite(id);
         try{
+            //todo: metadatas table add count(season)
+            //todo: if series_delete episodes
             favoritesService.deleteFavouriteByMetadataId(id);
             service.deleteMetadata(id);
             return ResponseEntity.accepted().build(); // .body(deletedMetadata); //.build();}

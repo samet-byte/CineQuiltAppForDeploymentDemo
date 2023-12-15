@@ -3,8 +3,10 @@ package com.sametb.cinequiltapp.metadata;
 import com.sametb.cinequiltapp._custom.SamTextFormat;
 import com.sametb.cinequiltapp.exception.MetadataAlreadyExistsException;
 import com.sametb.cinequiltapp.exception.MetadataNotFoundException;
+import com.sametb.cinequiltapp.user.Role;
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
@@ -28,11 +30,13 @@ public class MetadataService implements IMetadataService {
         return repository.findByTitleIgnoreCase(title).isPresent();
     }
 
-    public Metadata save(MetadataRequest request) {
+    public Metadata save(@NotNull MetadataRequest request) {
 
         if (request.getTitle() != null && isMetadataAlreadyExists(request.getTitle())) {
             throw new MetadataAlreadyExistsException(request.getTitle() + " already exists");
         } else {
+
+            RelationType relationType = (request.getType() != null) ? request.getType() : RelationType.MOVIE;
 
             var metadata = Metadata.builder()
                     .id(request.getId())
@@ -47,6 +51,9 @@ public class MetadataService implements IMetadataService {
                     .soundtrackUrl(request.getSoundtrackUrl())
                     .description(request.getDescription())
                     .genre(request.getGenre())
+                    .type(relationType)
+                    .seasonNumber(request.getSeason())
+                    .episodeNumber(request.getEpisode())
                     .build();
             repository.save(metadata);
             return metadata;
@@ -84,15 +91,16 @@ public class MetadataService implements IMetadataService {
     @Transactional
     public void deleteMetadata(Integer id) {
         try{
-            SamTextFormat.Companion.create("del s.").cyan().print();
-            SamTextFormat.Companion.create(
-                    repository.getById(id).getTitle()
-            ).yellow().print();
-//            repository.deleteById(id); // todo: stg is wrong
-//            repository.customDelete(id); // todo: stg is wrong
-            repository.deleteByTitle(
-                    repository.getById(id).getTitle()
-            );
+//            SamTextFormat.Companion.create("del s.").cyan().print();
+//            SamTextFormat.Companion.create(
+//                    repository.getById(id).getTitle()
+//            ).yellow().print();
+////            repository.deleteById(id); // todo: stg is wrong
+////            repository.customDelete(id); // todo: stg is wrong
+//            repository.deleteByTitle(
+//                    repository.getById(id).getTitle()
+//            );
+            repository.deleteById(id);
 
         }catch (Exception e){
             SamTextFormat.Companion.errorMessage(e.getMessage());

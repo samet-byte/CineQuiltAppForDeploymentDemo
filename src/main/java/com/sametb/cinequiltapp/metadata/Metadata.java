@@ -3,6 +3,7 @@ package com.sametb.cinequiltapp.metadata;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sametb.cinequiltapp.fav.Favourite;
+import com.sametb.cinequiltapp.tv_show.TVShow;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -58,6 +59,12 @@ public class Metadata {
     private String soundtrackUrl;
 
 
+    @Column(name = "season_number", nullable = true)
+    private Integer seasonNumber;
+
+    @Column(name = "episode_number", nullable = true)
+    private Integer episodeNumber;
+
     // for logging, sorting and possible lawsuits :|
     @CreatedDate
     @Column(nullable = false, updatable = false)
@@ -83,14 +90,6 @@ public class Metadata {
     @Column(name = "type", nullable = true)  // ENUM 1-> Series, 2-> ..logy
     @Enumerated(EnumType.STRING)
     private RelationType type;
-//
-//    @Column(name = "episode_number")
-//    private int episodeNumber;
-//
-//    @Column(name = "season_number")
-//    private int seasonNumber;
-
-    // todo: description, genre, etc.
 
     @JsonIgnore
     @OneToMany(
@@ -111,6 +110,6 @@ public class Metadata {
                     CascadeType.DETACH,
                     CascadeType.REFRESH,
             })
-    private Set<Series> series;
+    private Set<TVShow> TVShows;
 
 }

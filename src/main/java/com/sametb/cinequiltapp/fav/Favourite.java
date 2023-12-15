@@ -4,6 +4,7 @@ import com.sametb.cinequiltapp.metadata.Metadata;
 import com.sametb.cinequiltapp.user.User;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -16,11 +17,12 @@ import java.time.LocalDateTime;
  * MAYBE SOME OF 'EM. WHO KNOWS?
  */
 
-@Entity(name = "Favourite")
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@EntityListeners(AuditingEntityListener.class)
+@Entity(name = "Favourite")
 public class Favourite {
 
     @Id
@@ -34,6 +36,7 @@ public class Favourite {
 
     @ManyToOne
     @JoinColumn(name = "metadata_id", referencedColumnName = "id")
+    @JoinColumn(name = "metadata_title", referencedColumnName = "title")
     private Metadata metadata;
 
 
