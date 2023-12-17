@@ -1,5 +1,6 @@
 package com.sametb.cinequiltapp.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sametb.cinequiltapp.fav.Favourite;
 import com.sametb.cinequiltapp.token.Token;
 import jakarta.persistence.*;
@@ -45,6 +46,7 @@ public class User implements UserDetails {
   @Column(name = "role", nullable = false)
   private Role role;
 
+  @JsonIgnore
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Token> tokens;
 
@@ -62,7 +64,7 @@ public class User implements UserDetails {
 
   @Override
   public String getUsername() {
-    return username ;                     // todo: change email to username
+    return username ;
   }
 
   @Override
@@ -85,15 +87,7 @@ public class User implements UserDetails {
     return true;
   }
 
-
-//  @ManyToMany(cascade = CascadeType.PERSIST)
-//    @JoinTable(
-//            name = "user_metadata",
-//            joinColumns = @JoinColumn(name = "user_id"),
-//            inverseJoinColumns = @JoinColumn(name = "metadata_id"))
-//    private Set<Metadata> metadata = new HashSet<>();
-
-
+  @JsonIgnore
   @OneToMany(
           mappedBy = "user",
           cascade = {
@@ -102,6 +96,4 @@ public class User implements UserDetails {
                   CascadeType.REFRESH,
           })
   private Set<Favourite> favourites;
-
-
 }

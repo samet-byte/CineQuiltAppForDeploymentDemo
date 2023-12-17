@@ -86,9 +86,9 @@ public class Metadata {
     @Column(name = "description", nullable = true, length = 1000)
     private String description;
 
-
-    @Column(name = "type", nullable = true)  // ENUM 1-> Series, 2-> ..logy
+    // ENUM 1-> Series, 2-> Movie
     @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = true)
     private RelationType type;
 
     @JsonIgnore

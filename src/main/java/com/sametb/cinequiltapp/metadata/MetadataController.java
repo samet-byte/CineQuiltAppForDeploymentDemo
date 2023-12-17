@@ -3,29 +3,27 @@ package com.sametb.cinequiltapp.metadata;
 import com.sametb.cinequiltapp._custom.SamTextFormat;
 import com.sametb.cinequiltapp.exception.MetadataNotFoundException;
 import com.sametb.cinequiltapp.fav.IFavService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+import static com.sametb.cinequiltapp._custom.CustomFunsKt.decodeString;
+
 @RestController
-@RequestMapping("/api/v1/metadatas")
 @RequiredArgsConstructor
-@CrossOrigin("http://localhost:3000") //!! allowing client application with port 3000 to consume the backed
-//@CrossOrigin("*")
+@RequestMapping("/api/v1/metadatas")
+@CrossOrigin("http://localhost:3000")
 public class MetadataController {
 
     private final MetadataService service;
+    private final IFavService favoritesService;
 
-    //////////////////////////////////////////////////////////////////////////////////// create - insert
+
     @PostMapping
-    @PreAuthorize("hasRole('ADMIN')") // !! MANAGER manager:create is better
-//    @PreAuthorize("hasAuthority('admin:create')")
+    @PreAuthorize("hasAnyAuthority('admin:create', 'manager:create')")
     public ResponseEntity<?> save(
             @RequestBody MetadataRequest request
     ) {
@@ -33,24 +31,20 @@ public class MetadataController {
         return ResponseEntity.accepted().body(savedMetadata); //.build();
     }
 
-    //////////////////////////////////////////////////////////////////////////////////// find - search
 
-//    @GetMapping
-//    public ResponseEntity<List<Metadata>> findAllMetadatas() {
-//        return ResponseEntity.ok(service.findAll());
-//    }
     @GetMapping
     public ResponseEntity<List<Metadata>> findAllMetadatasBy(
+            @RequestParam(required = false) String col,
+            @RequestParam(required = false) String val,
             @RequestParam(required = false) String by,
             @RequestParam(required = false) String order
     ) {
         if (by != null && order != null) {
-            return ResponseEntity.ok(service.findAllBy(by, order));
+            return ResponseEntity.ok(service.findAllBy(col, val, by, order));
         }
         return ResponseEntity.ok(service.findAll());
     }
 
-//    @GetMapping("{id}")
     @GetMapping("/{id}")
     public ResponseEntity<Metadata> findById(@PathVariable Integer id) {
         return ResponseEntity.ok(service.findById(id));
@@ -63,19 +57,15 @@ public class MetadataController {
     @GetMapping("/title/single/{title}")
     public ResponseEntity<Metadata> findByTitleSingle(@PathVariable String title) {
         try {
-            String serachTitle = decodeString(title);
-//            SamTextFormat.Companion.create("serachTitle: " + serachTitle).yellow().print();
-            return ResponseEntity.ok(service.findByTitle(serachTitle));
+            String searchTitle = decodeString(title);
+            return ResponseEntity.ok(service.findByTitle(searchTitle));
         } catch (Exception e) {
-            e.printStackTrace();
+            SamTextFormat.Companion.errorMessage(e.getMessage());
             return ResponseEntity.notFound().build();
         }
     }
 
-    String decodeString(String s){
-        return URLDecoder.decode(s, StandardCharsets.UTF_8);
-    }
-    
+
     @GetMapping("/director/{director}")
     public ResponseEntity<List<Metadata>> findByDirector(@PathVariable String director) {
         return ResponseEntity.ok(service.findByDirectorContaining(director));
@@ -93,50 +83,32 @@ public class MetadataController {
     
     @GetMapping("/search/{query}")
     public ResponseEntity<List<Metadata>> findByQuery(@PathVariable String query) {
-        return ResponseEntity.ok(service.findByTitleContainingOrDirectorContainingOrYearContaining(query));
+        return ResponseEntity.ok(service.findByTitleContainingOrDirectorContaining(query));
     }
-//    @GetMapping("/search/{query}")
-//    public ResponseEntity<List<Metadata>> findByQuery(@PathVariable String query) {
-//        return ResponseEntity.ok(service.findByTitleContainingOrDirectorContaining(query, query));
-//    }
 
-    //////////////////////////////////////////////////////////////////////////////////// update - modify
     @PutMapping("/{id}")
-//    @PreAuthorize("hasAuthority('admin:update')")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('admin:update', 'manager:update')")
     public ResponseEntity<Metadata> updateMetadata(@RequestBody Metadata metadata, @PathVariable Integer id) {
         return ResponseEntity.ok(service.updateMetadataById(id, metadata)
                 .orElseThrow(() -> new MetadataNotFoundException("Metadata not found with this ID!")));
     }
 
 
-
-    private final IFavService favoritesService;
-
-    //////////////////////////////////////////////////////////////////////////////////// delete - remove
-    //@Transactional
     @DeleteMapping("/{id}")
-    //@PreAuthorize("hasRole('ADMIN')")//todo: ADMIN
-//    @PreAuthorize("hasAuthority('admin:delete')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Metadata> deleteMetadata(
             @PathVariable Integer id
     ) {
-//        Metadata deletedMetadata = service.findById(id);
-//        favoritesService.deleteFavourite(id);
         try{
-            //todo: metadatas table add count(season)
             //todo: if series_delete episodes
             favoritesService.deleteFavouriteByMetadataId(id);
             service.deleteMetadata(id);
             return ResponseEntity.accepted().build(); // .body(deletedMetadata); //.build();}
     } catch (Exception e) {
-            e.printStackTrace();
+            SamTextFormat.Companion.errorMessage(e.getMessage());
             return ResponseEntity.notFound().build();
         }
     }
-
-
-
 }
 
 

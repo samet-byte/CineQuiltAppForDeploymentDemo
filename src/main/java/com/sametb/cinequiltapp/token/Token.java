@@ -1,6 +1,7 @@
 package com.sametb.cinequiltapp.token;
 
 
+import com.sametb.cinequiltapp.token.TokenType;
 import com.sametb.cinequiltapp.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

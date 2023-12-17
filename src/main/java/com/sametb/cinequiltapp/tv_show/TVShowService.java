@@ -26,7 +26,7 @@ public class TVShowService implements ITVShowService {
         return tvShowRepository.save(TVShow);
     }
 
-
+    @Override
     public List<TVShow> getAllTVShows() {
         return tvShowRepository.findAll();
     }
@@ -35,18 +35,22 @@ public class TVShowService implements ITVShowService {
 //        return tvShowRepository.getAllTVShowsGroupByTitle();
 //    }
 
+    @Override
     public List<TVShow> getAllTVShowsByMetadataId(Integer id) {
         return tvShowRepository.findAllByMetadataId(id);
     }
 
+    @Override
     public List<TVShow> getByMetadataIdAndSeason(Integer metadataId, Integer season) {
         return tvShowRepository.findAllByMetadataIdAndSeasonOrderByEpisode(metadataId, season);
     }
 
+    @Override
     public void deleteTVShowById(Integer id) {
         tvShowRepository.deleteById(id);
     }
 
+    @Override
     public boolean updateEpisode(Integer id, TVShowRequest tvShowRequest) {
         if (tvShowRequest == null) return false;
 
@@ -60,11 +64,12 @@ public class TVShowService implements ITVShowService {
         return true;
     }
 
+    @Override
     public TVShow findByMetadataIdAndSeasonAndEpisode(Integer metadataId, Integer season, Integer episode){
         return tvShowRepository.findByMetadataIdAndSeasonAndEpisode(metadataId, season, episode);
     }
 
-
+    @Override
     public Optional<TVShow> getTVShowById(Integer id) {
         return tvShowRepository.findById(id);
     }

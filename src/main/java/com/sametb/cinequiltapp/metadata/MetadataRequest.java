@@ -10,7 +10,6 @@ import java.util.List;
 @Setter
 @Builder
 public class MetadataRequest {
-
     private Integer id;
     private String title;
     private String director;
@@ -25,5 +24,4 @@ public class MetadataRequest {
     private RelationType type;
     private Integer season;
     private Integer episode;
-
 }

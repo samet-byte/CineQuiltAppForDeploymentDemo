@@ -478,3 +478,136 @@ private String buildToken(
 //    private String createTime;
 
 //, nullable = true, columnDefinition = "VARCHAR(255) DEFAULT 'N/A'")
+
+
+
+//    @JsonProperty("accessToken")
+//    @JsonProperty("refreshToken")
+//    @JsonProperty("userId")
+//    @JsonProperty("username")
+//    @JsonProperty("email")
+//    @JsonProperty("country")
+//    @JsonProperty("roles")
+
+
+
+
+//    FILM_SERIES,
+//    TRILOGY,
+//    SAGA,
+//    SEQUEL,
+//    PREQUEL,
+//    REMAKE,
+//    REBOOT,
+//    SPIN_OFF,
+
+
+//        return ResponseEntity.ok(service.findByTitleContainingOrDirectorContainingOrYearContaining(query));
+
+
+    @Query(value = "SELECT m FROM Metadata m WHERE LOWER(m.title) LIKE LOWER(concat('%', :query, '%')) OR LOWER(m.director) LIKE LOWER(concat('%', :query, '%')) OR LOWER(CAST(m.releaseYear AS STRING)) LIKE LOWER(concat('%', :query, '%'))")
+    List<Metadata> findByTitleContainingOrDirectorContainingOrYearContaining(@Param("query") String query);
+
+
+    @Deprecated
+    @Query("DELETE FROM Metadata m WHERE m.id = :id")
+    void customDelete(Integer id);
+
+    @Deprecated
+    void deleteByTitle(String title);
+
+
+    @Override
+    public List<Metadata> findByTitleContainingOrDirectorContainingOrYearContaining(String query) {
+        return repository.findByTitleContainingOrDirectorContainingOrYearContaining(query);
+    }
+
+    List<Metadata> findByTitleContainingOrDirectorContainingOrYearContaining(String query);
+
+
+.......................................................................................................................
+
+ // SORTING
+    @Query("SELECT m FROM Metadata m ORDER BY m.title ASC, m.director ASC, m.releaseYear ASC, m.duration ASC")
+    List<Metadata> findAllOrderByTitleAsc();
+
+    @Query("SELECT m FROM Metadata m ORDER BY m.title DESC, m.director ASC, m.releaseYear ASC, m.duration ASC")
+    List<Metadata> findAllOrderByTitleDesc();
+
+    @Query("SELECT m FROM Metadata m ORDER BY m.director ASC, m.title ASC, m.releaseYear ASC, m.duration ASC")
+    List<Metadata> findAllOrderByDirectorAsc();
+    @Query("SELECT m FROM Metadata m ORDER BY m.director DESC, m.title ASC, m.releaseYear ASC, m.duration ASC")
+    List<Metadata> findAllOrderByDirectorDesc();
+
+    @Query("SELECT m FROM Metadata m ORDER BY m.releaseYear ASC, m.title ASC, m.director ASC, m.duration ASC")
+    List<Metadata> findAllOrderByYearAsc();
+    @Query("SELECT m FROM Metadata m ORDER BY m.releaseYear DESC, m.title ASC, m.director ASC, m.duration ASC")
+    List<Metadata> findAllOrderByYearDesc();
+
+    @Query("SELECT m FROM Metadata m ORDER BY m.duration ASC, m.title ASC, m.director ASC, m.releaseYear ASC")
+    List<Metadata> findAllOrderByDurationAsc();
+    @Query("SELECT m FROM Metadata m ORDER BY m.duration DESC, m.title ASC, m.director ASC, m.releaseYear ASC")
+    List<Metadata> findAllOrderByDurationDesc();
+
+
+
+     List<Metadata> findAllByOrderByTitleAscDirectorAscReleaseYearAsc();
+
+        List<Metadata> findAllByOrderByTitleDescDirectorAscReleaseYearAsc();
+
+        List<Metadata> findAllByOrderByDirectorAscTitleAscReleaseYearAsc();
+
+        List<Metadata> findAllByOrderByDirectorDescTitleAscReleaseYearAsc();
+
+        List<Metadata> findAllByOrderByReleaseYearAscTitleAscDirectorAsc();
+
+        List<Metadata> findAllByOrderByReleaseYearDescTitleAscDirectorAsc();
+
+        List<Metadata> findAllByOrderByDurationAscTitleAscDirectorAsc();
+
+        List<Metadata> findAllByOrderByDurationDescTitleAscDirectorAsc();
+
+
+        List<Metadata> findAllByOrderByLastModifiedDescCreateDateDesc();
+
+        List<Metadata> findAllByOrderByLastModifiedAscCreateDateAsc();
+
+        List<Metadata> findAllByGenreOrderByTitleAsc(String genre);
+
+
+
+//        if (by == null || order == null) { return repository.findAll(); }
+//        else if (by.equals("title") && order.equals("asc")) {
+////            return repository.findAllByOrderByTitleAscDirectorAscReleaseYearAsc();
+//            return repository.demoProcedure("title");
+//        } else if (by.equals("title") && order.equals("desc")) {
+//            return repository.findAllByOrderByTitleDescDirectorAscReleaseYearAsc();
+//        } else if (by.equals("duration") && order.equals("asc")) {
+//            return repository.findAllByOrderByDurationAscTitleAscDirectorAsc();
+//        } else if (by.equals("duration") && order.equals("desc")) {
+//            return repository.findAllByOrderByDurationDescTitleAscDirectorAsc();
+//        } else if (by.equals("releaseYear") && order.equals("asc")) {
+//            return repository.findAllByOrderByReleaseYearAscTitleAscDirectorAsc();
+//        } else if (by.equals("releaseYear") && order.equals("desc")) {
+//            return repository.findAllByOrderByReleaseYearDescTitleAscDirectorAsc();
+//        } else if (by.equals("director") && order.equals("asc")) {
+//            return repository.findAllByOrderByDirectorAscTitleAscReleaseYearAsc();
+//        } else if (by.equals("director") && order.equals("desc")) {
+//            return repository.findAllByOrderByDirectorDescTitleAscReleaseYearAsc();
+//        } else {
+//            return repository.findAll();
+//        }
+
+
+
+    @Query(value = "select * from sort_by_order(:by, :order)", nativeQuery = true)
+    List<Metadata> sortByOrder(
+            @Param("by") String by,
+            @Param("order") String order
+    );
+
+
+
+
+
+.......................................................................................................................

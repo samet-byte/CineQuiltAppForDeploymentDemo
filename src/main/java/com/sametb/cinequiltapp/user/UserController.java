@@ -20,12 +20,11 @@ public class UserController {
 
     private final UserService service;
 
-    @GetMapping //todo: principal?
+    @GetMapping
     public ResponseEntity<?> findByUsernameOrEmail(
             Principal connectedUser
     ) {
-        Optional<UserDTO> user = (Optional.ofNullable(service.findByUsernameOrEmail(connectedUser)));
-//        Optional<User> user = Optional.ofNullable(service.findByUsernameOrEmail(connectedUser));
+        Optional<UserResponse> user = (Optional.ofNullable(service.findByUsernameOrEmail(connectedUser)));
         return ResponseEntity.ok().body(user);
     }
 
@@ -33,26 +32,23 @@ public class UserController {
     public ResponseEntity<?> findByUsername(
             @PathVariable String username
     ) {
-        UserDTO user = UserDTO.fromUser(service.findByUsername(username));
+        UserResponse user = UserResponse.fromUser(service.findByUsername(username));
         return ResponseEntity.ok().body(user);
     }
 
     @GetMapping("/id/{id}")
-    public ResponseEntity<?> findById(
-            @PathVariable Integer id
-    ) {
-        UserDTO user = UserDTO.fromUser(service.findByIDNonOptional(id));
+    public ResponseEntity<?> findById(@PathVariable Integer id) {
+        UserResponse user = UserResponse.fromUser(service.findByIDNonOptional(id));
         return ResponseEntity.ok().body(user);
     }
 
 
    @GetMapping("/all")
    @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<UserDTO>> findAll(
-//            Principal connectedUser
+    public ResponseEntity<List<UserResponse>> findAll(
     ) {
         try {
-            return ResponseEntity.ok().body(service.findAllDTO());
+            return ResponseEntity.ok().body(service.findAllResponse());
         } catch (Exception e) {
             SamTextFormat.Companion.create(e.getMessage()).red().print();
         }
@@ -68,9 +64,6 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
-
-    //todo: stg wrong with delete
-    //WARN 5463 --- [nio-8080-exec-4] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.http.converter.HttpMessageNotReadableException: JSON parse error: Cannot construct instance of `com.sametb.cinequiltapp.user.DeleteUserRequest` (although at least one Creator exists): cannot deserialize from Object value (no delegate- or property-based Creator)]
     @DeleteMapping("/{username}")
     public ResponseEntity<?> delete(
             @PathVariable String username,

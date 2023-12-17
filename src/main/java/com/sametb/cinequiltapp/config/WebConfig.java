@@ -1,5 +1,13 @@
 package com.sametb.cinequiltapp.config;
 
+import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import static com.sametb.cinequiltapp.config.HttpMethods.*;
+
 /**
  * @author Samet Bayat.
  * Date: 2.12.2023 4:39 PM
@@ -8,19 +16,25 @@ package com.sametb.cinequiltapp.config;
  * MAYBE SOME OF 'EM. WHO KNOWS?
  */
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
 @Configuration
+@RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
+    private final ServerProperties serverProperties;
 
     @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/api/**")
-                .allowedOrigins("http://localhost:3000")
+    public void addCorsMappings(@NotNull CorsRegistry registry) {
+        registry.addMapping(serverProperties.getApiAllowAll())
+                .allowedOrigins(serverProperties.getOrigin())
                 .allowCredentials(true)
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "PATCH");
+                .allowedMethods(
+                        String.valueOf(GET),
+                        String.valueOf(POST),
+                        String.valueOf(PUT),
+                        String.valueOf(DELETE),
+                        String.valueOf(PATCH)
+                );
+
+
+
     }
 }

@@ -26,7 +26,6 @@ public class TVShowResponse {
     private Integer metadataId;
     private String metadataTitle;
 
-
     private Integer id;
     private Integer season;
     private Integer episode;
@@ -34,7 +33,7 @@ public class TVShowResponse {
     private String videoUrl;
     private String description;
 
-    public static TVShowResponse fromTVShow(TVShow TVShow) {
+    public static TVShowResponse fromTVShow(@NotNull TVShow TVShow) {
         return TVShowResponse.builder()
                 .metadataId(TVShow.getMetadata().getId())
                 .metadataTitle(TVShow.getMetadata().getTitle())

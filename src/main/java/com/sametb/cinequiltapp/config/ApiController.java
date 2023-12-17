@@ -1,5 +1,6 @@
 package com.sametb.cinequiltapp.config;
 
+import com.sametb.cinequiltapp._custom.SamTextFormat;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,15 +21,13 @@ import java.net.UnknownHostException;
 @RequestMapping("/api/v1")
 @CrossOrigin("http://localhost:3000")
 public class ApiController {
-
     @GetMapping("/ip")
     public String getServerIp() {
         try {
             InetAddress inetAddress = InetAddress.getLocalHost();
             return inetAddress.getHostAddress();
         } catch (UnknownHostException e) {
-            // Handle the exception (e.g., log or return a default value)
-            e.printStackTrace();
+            SamTextFormat.Companion.errorMessage("Error getting IP address: " + e.getMessage());
             return "Unable to retrieve IP address";
         }
     }

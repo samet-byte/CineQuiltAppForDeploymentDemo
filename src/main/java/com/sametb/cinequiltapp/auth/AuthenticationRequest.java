@@ -10,7 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthenticationRequest {
-  //todo: change to usernameOrPassword
   private String emailOrUsername;
   private String password;
 }

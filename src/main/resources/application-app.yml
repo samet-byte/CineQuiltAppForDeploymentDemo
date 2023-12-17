@@ -1,0 +1,17 @@
+api-allow-all: /api/**
+
+base: /api/v1
+
+endpoint:
+  auth: ${base}/auth
+  auth-logout: ${endpoint.auth}/logout
+  #for demo
+  management-allow-all: ${base}/management/**
+
+origin:
+  base: http://localhost
+  port: 3000
+
+header:
+  authorization: 'Authorization'
+  bearer_: 'Bearer '

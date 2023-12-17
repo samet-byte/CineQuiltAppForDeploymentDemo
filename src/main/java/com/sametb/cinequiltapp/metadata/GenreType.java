@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
  * MAYBE SOME OF 'EM. WHO KNOWS?
  */
 
+@Deprecated
 @Getter
 @AllArgsConstructor
 //@RequiredArgsConstructor

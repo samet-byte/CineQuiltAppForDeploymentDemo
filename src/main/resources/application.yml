@@ -19,14 +19,17 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: * * *
-    password: * * *
+    username: ${key.mail-username}
+    password: ${key.mail-password}
     properties:
       mail:
         smtp:
           auth: true
           starttls:
             enable: true
+  profiles:
+    include: app, key
+
 
 
 application:
@@ -38,5 +41,15 @@ application:
       refresh-token:
         expiration: 604800000 # 7 days
 #        expiration: 150000 # 15 sec.
+
+mail-service:
+  image: src/main/assets/rose_pedal_heart.png
+  direct-link: https://sametb.com/ad
+  greet: "Welcome to CineQuilt!"
+  slogan: "Let our cinematic warmth wrap you with joy!"
+  farewell: "We'll miss you :("
+  signature: "CineQuilt Team"
+
+
 
 

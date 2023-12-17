@@ -16,6 +16,7 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
+@Deprecated
 @RestController
 @RequestMapping("/api/v1/management")
 @Tag(name = "Management")
@@ -74,11 +75,11 @@ public class ManagementController {
     @GetMapping("/title/single/{title}")
     public ResponseEntity<Metadata> findByTitleSingle(@PathVariable String title) {
         try {
-            String serachTitle = decodeString(title);
-            SamTextFormat.Companion.create("serachTitle: " + serachTitle).yellow().print();
-            return ResponseEntity.ok(service.findByTitle(serachTitle));
+            String searchTitle = decodeString(title);
+            SamTextFormat.Companion.create("searchTitle: " + searchTitle).yellow().print();
+            return ResponseEntity.ok(service.findByTitle(searchTitle));
         } catch (Exception e) {
-            e.printStackTrace();
+            SamTextFormat.Companion.errorMessage(e.getMessage());
             return ResponseEntity.notFound().build();
         }
     }
@@ -104,7 +105,8 @@ public class ManagementController {
 
     @GetMapping("/search/{query}")
     public ResponseEntity<List<Metadata>> findByQuery(@PathVariable String query) {
-        return ResponseEntity.ok(service.findByTitleContainingOrDirectorContainingOrYearContaining(query));
+//        return ResponseEntity.ok(service.findByTitleContainingOrDirectorContainingOrYearContaining(query));
+        return ResponseEntity.ok(service.findByTitleContainingOrDirectorContaining(query));
     }
 
 }

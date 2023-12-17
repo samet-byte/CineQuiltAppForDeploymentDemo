@@ -3,7 +3,6 @@ package com.sametb.cinequiltapp.metadata;
 import com.sametb.cinequiltapp._custom.SamTextFormat;
 import com.sametb.cinequiltapp.exception.MetadataAlreadyExistsException;
 import com.sametb.cinequiltapp.exception.MetadataNotFoundException;
-import com.sametb.cinequiltapp.user.Role;
 import jakarta.annotation.Nullable;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -13,10 +12,9 @@ import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+
+import static com.sametb.cinequiltapp.metadata.MetadataBuilder.buildMetadataWithRequest;
 
 
 @Service
@@ -26,83 +24,44 @@ public class MetadataService implements IMetadataService {
 
     private final MetadataRepository repository;
 
+    @Override
     public boolean isMetadataAlreadyExists(String title) {
         return repository.findByTitleIgnoreCase(title).isPresent();
     }
 
+    @Override
     public Metadata save(@NotNull MetadataRequest request) {
 
         if (request.getTitle() != null && isMetadataAlreadyExists(request.getTitle())) {
             throw new MetadataAlreadyExistsException(request.getTitle() + " already exists");
         } else {
-
-            RelationType relationType = (request.getType() != null) ? request.getType() : RelationType.MOVIE;
-
-            var metadata = Metadata.builder()
-                    .id(request.getId())
-                    .title(request.getTitle())
-                    .director(Optional.ofNullable(request.getDirector()).orElse("N/A"))
-                    .releaseYear(Optional.of(request.getReleaseYear()).orElse(0))
-                    .duration(Optional.of(request.getDuration()).orElse(0))
-                    .posterUrl(Optional.ofNullable(request.getPosterUrl()).orElse("https://sametb.com/no-content.jpg"))
-//                    .videoUrl(Optional.ofNullable(request.getVideoUrl()).orElse("https://sametb.com/no-content.mp4"))
-                    .videoUrl(request.getVideoUrl())
-                    .trailerUrl(request.getTrailerUrl())
-                    .soundtrackUrl(request.getSoundtrackUrl())
-                    .description(request.getDescription())
-                    .genre(request.getGenre())
-                    .type(relationType)
-                    .seasonNumber(request.getSeason())
-                    .episodeNumber(request.getEpisode())
-                    .build();
+            var metadata = buildMetadataWithRequest(request);
             repository.save(metadata);
             return metadata;
         }
     }
 
-
-    public List<Metadata> findAll() { return repository.findAll(); }
-
-    public List<Metadata> findAllBy(@Nullable String by, @Nullable String order) {
-        if (by == null || order == null) {
-            return repository.findAll();
-        } else if (by.equals("title") && order.equals("asc")) {
-            return repository.findAllOrderByTitleAsc();
-        } else if (by.equals("title") && order.equals("desc")) {
-            return repository.findAllOrderByTitleDesc();
-        } else if (by.equals("duration") && order.equals("asc")) {
-            return repository.findAllOrderByDurationAsc();
-        } else if (by.equals("duration") && order.equals("desc")) {
-            return repository.findAllOrderByDurationDesc();
-        } else if (by.equals("releaseYear") && order.equals("asc")) {
-            return repository.findAllOrderByYearAsc();
-        } else if (by.equals("releaseYear") && order.equals("desc")) {
-            return repository.findAllOrderByYearDesc();
-        } else if (by.equals("director") && order.equals("asc")) {
-            return repository.findAllOrderByDirectorAsc();
-        } else if (by.equals("director") && order.equals("desc")) {
-            return repository.findAllOrderByDirectorDesc();
-        } else {
-            return repository.findAll();
-        }
+    @Override
+    public List<Metadata> findAll() {
+        return repository.findAll();
     }
 
+    @Override
+    public List<Metadata> findAllBy(
+            @Nullable String col,
+            @Nullable String val,
+            @Nullable String by,
+            @Nullable String order
+    ) {
+        return repository.findAllByColumnAndValue(col, val, by, order);
+    }
 
+    @Override
     @Transactional
     public void deleteMetadata(Integer id) {
-        try{
-//            SamTextFormat.Companion.create("del s.").cyan().print();
-//            SamTextFormat.Companion.create(
-//                    repository.getById(id).getTitle()
-//            ).yellow().print();
-////            repository.deleteById(id); // todo: stg is wrong
-////            repository.customDelete(id); // todo: stg is wrong
-//            repository.deleteByTitle(
-//                    repository.getById(id).getTitle()
-//            );
+        try {
             repository.deleteById(id);
-
-        }catch (Exception e){
+        } catch (Exception e) {
             SamTextFormat.Companion.errorMessage(e.getMessage());
         }
     }
@@ -137,17 +96,13 @@ public class MetadataService implements IMetadataService {
         return repository.findByDuration(duration);
     }
 
+
     @Override
-    public List<Metadata> findByTitleContainingOrDirectorContaining(String title, String director) {
-        return repository.findByTitleContainingIgnoreCaseOrDirectorContainingIgnoreCase(title, director);
+    public List<Metadata> findByTitleContainingOrDirectorContaining(String query) {
+        return repository.findByTitleContainingIgnoreCaseOrDirectorContainingIgnoreCase(query, query);
     }
 
     @Override
-    public List<Metadata> findByTitleContainingOrDirectorContainingOrYearContaining(String query) {
-        return repository.findByTitleContainingOrDirectorContainingOrYearContaining(query);
-    }
-
-
     public Optional<Metadata> updateMetadataById(Integer id, Metadata updatedMetadata) {
         if (updatedMetadata == null || id == null || repository.findById(id).isEmpty()) {
             return Optional.empty();
@@ -171,6 +126,7 @@ public class MetadataService implements IMetadataService {
     }
 
     // Helper method to get null property names of an object
+    @NotNull
     private String[] getNullPropertyNames(Object source) {
         final BeanWrapper src = new BeanWrapperImpl(source);
         java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();

@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @author Samet Bayat.
@@ -34,7 +33,5 @@ public interface TVShowRepository extends JpaRepository<TVShow, Integer> {
 
     TVShow findByMetadataIdAndSeasonAndEpisode(Integer metadataId, Integer season, Integer episode);
 
-    @Query("SELECT DISTINCT MAX(tv.season) FROM TVShow tv WHERE tv.metadata.id = :metadataId")
-    Integer howManySeasons(Integer metadataId);
 
 }

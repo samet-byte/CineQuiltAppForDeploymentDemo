@@ -20,8 +20,8 @@ public class FavService implements IFavService {
     private final FavRepository favouriteRepository;
 
     @Override
-    public Favourite saveFavourite(Favourite favourite) {
-        return favouriteRepository.save(favourite);
+    public void saveFavourite(Favourite favourite) {
+        favouriteRepository.save(favourite);
     }
 
     @Override
@@ -39,26 +39,10 @@ public class FavService implements IFavService {
         return favouriteRepository.getAllByUserId(userId);
     }
 
-
-
-//
-//    @Override
-//    public Favourite getFavouriteByUserNameOrEmailAndMetadataId(String user, Integer metadataId) {
-//        return favouriteRepository.getByUserUsernameOrUserEmailAndMetadataId(user, user, metadataId);
-//    }
-//
-//    @Override
-//    public List<Favourite> getFavListByUsername(String user) {
-//        return favouriteRepository.getAllByUserIdOrUserEmail(user, user);
-//    }
-
-
     @Override
     public void deleteFavourite(Long id) {
         favouriteRepository.deleteById(id);
     }
-
-
 
     @Override
     public void deleteFavouriteByMetadataId(Integer metadataId) {
@@ -69,18 +53,4 @@ public class FavService implements IFavService {
     public Favourite getByUserIdAndMetadataId(Integer userId, Integer metadataId) {
         return favouriteRepository.getByUserIdAndMetadataId(userId, metadataId);
     }
-
-
-//
-//    @Override
-//    public List<Favourite> getAllByUsernameOrEmail(String user) {
-//        return favouriteRepository.getAllByUserIdOrUserEmail(user, user);
-//    }
-//
-//
-//    @Override
-//    public Favourite getByUserUsernameOrUserEmailAndMetadataId(String user, Integer metadataId) {
-//        return favouriteRepository.getByUserUsernameOrUserEmailAndMetadataId(user, user, metadataId);
-//    }
-
 }

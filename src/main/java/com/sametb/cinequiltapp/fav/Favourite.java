@@ -29,7 +29,6 @@ public class Favourite {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
@@ -39,11 +38,7 @@ public class Favourite {
     @JoinColumn(name = "metadata_title", referencedColumnName = "title")
     private Metadata metadata;
 
-
     @DateTimeFormat(pattern = "yyyy-MM-dd HH.mm:ss A")
     @Column(name = "create_time", nullable = false)
     private LocalDateTime createTime;
-
-
-
 }

@@ -20,6 +20,8 @@ class SamTextFormat private constructor(private val text: String) {
 
         fun errorMessage(text: String) { println("$ANSI_COLOR_RED$ANSI_BOLD$text$ANSI_RESET") }
         fun create(text: String): SamTextFormat { return SamTextFormat(text) }
+
+        fun doneMessage(text: String){ println("$ANSI_COLOR_GREEN$ANSI_BOLD$text$ANSI_RESET") }
     }
 
     fun reset(): SamTextFormat { return SamTextFormat("$text$ANSI_RESET") }

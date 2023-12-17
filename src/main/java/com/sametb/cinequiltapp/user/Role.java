@@ -1,7 +1,9 @@
 package com.sametb.cinequiltapp.user;
 
+import com.sametb.cinequiltapp.user.Permission;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collections;
@@ -12,6 +14,7 @@ import java.util.stream.Collectors;
 import static com.sametb.cinequiltapp.user.Permission.*;
 
 
+@Getter
 @RequiredArgsConstructor
 public enum Role {
 
@@ -35,13 +38,11 @@ public enum Role {
                   MANAGER_DELETE,
                   MANAGER_CREATE
           )
-  )
+  );
 
-  ;
-
-  @Getter
   private final Set<Permission> permissions;
 
+  @NotNull
   public List<SimpleGrantedAuthority> getAuthorities() {
     var authorities = getPermissions()
             .stream()

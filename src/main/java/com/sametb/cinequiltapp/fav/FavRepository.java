@@ -17,13 +17,9 @@ public interface FavRepository extends JpaRepository<Favourite, Long> {
 
     Favourite getByUserIdAndMetadataId(Integer userId, Integer metadataId);
 
-//    Favourite getByUserUsernameOrUserEmailAndMetadataId(String username, String email, Integer metadataId);
-
     List<Favourite> getAllByUserId(Integer userId);
 
-//    List<Favourite> getAllByUserIdOrUserEmail(String username, String email);
-
-   @Transactional
+    @Transactional
     void deleteAllByMetadataId(Integer metadataId);
 }
 

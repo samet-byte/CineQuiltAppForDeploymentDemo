@@ -9,7 +9,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -21,20 +20,19 @@ import java.util.Optional;
  */
 
 
-//@CrossOrigin(origins = "*", allowedHeaders = "*")
 @CrossOrigin("http://localhost:3000")
 @RestController
 @RequestMapping("/api/v1/tvshow")
 @RequiredArgsConstructor
 public class TVShowController {
 
-    private final TVShowService tvShowService; // todo: I .. Service
+    private final ITVShowService tvShowService; // todo: I .. Service
 
     private final MetadataService metadataService;
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public TVShowResponse saveTVShow(@RequestBody TVShowRequest tvShowRequest) {
-//        SamTextFormat.Companion.create(tvShowRequest.toString()).red().print();
         TVShow tvShow = TVShow.fromTVShowRequest(tvShowRequest, metadataService.findById(tvShowRequest.getMetadataId()));
         TVShow savedTVShow = tvShowService.save(tvShow);
         return TVShowResponse.fromTVShow(savedTVShow);
@@ -57,6 +55,7 @@ public class TVShowController {
         return tvShowService.getTVShowById(id);
     }
 
+    @Deprecated
     @GetMapping("/{metadataId}/{index}")
     public TVShow getTVShowByMetadataIdAndTVShowId(@PathVariable Integer metadataId, @PathVariable Integer index)  {
         return tvShowService.getAllTVShowsByMetadataId(metadataId).get(index);
@@ -64,14 +63,8 @@ public class TVShowController {
 
     @GetMapping("season/{metadataId}/{season}")
     public List<TVShow> getTVShowByMetadataIdAndSeason(@PathVariable Integer metadataId, @PathVariable Integer season)  {
-        SamTextFormat.Companion.create(
-                "metadataId:" + metadataId + "\n" +
-                        "season: " + season
-
-        ).blue().print();
         return tvShowService.getByMetadataIdAndSeason(metadataId, season);
     }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteEpisode(@PathVariable Integer id) {
@@ -98,8 +91,6 @@ public class TVShowController {
             return ResponseEntity.badRequest().build();
     }
 
-
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("{metadataId}/{season}/{episode}")
     public TVShow getTVShowByMetadataIdAndSeasonAndEpisode(
             @PathVariable Integer metadataId,
@@ -108,24 +99,4 @@ public class TVShowController {
     )  {
         return tvShowService.findByMetadataIdAndSeasonAndEpisode(metadataId, season, episode);
     }
-
-
-
-    final TVShowRepository tvShowRepository;
-
-//    @GetMapping("/seasonNum/{metadataId}")
-    @GetMapping("/groupBySeason/{metadataId}")
-    public ResponseEntity<?> TEST(@PathVariable Integer metadataId){
-
-        return ResponseEntity.ok().body(tvShowRepository.getTVShowsGroupBySeasonWhereMetadataId(metadataId));
-    }
-
-
-    @GetMapping("/seasonsCount/{metadataId}")
-    public ResponseEntity<?> howManySeasons(@PathVariable Integer metadataId) {
-        Integer seasonCount = tvShowRepository.howManySeasons(metadataId);
-        return ResponseEntity.ok().body(Map.of("seasonCount", seasonCount));
-
-    }
-
 }
