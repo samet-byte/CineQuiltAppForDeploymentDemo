@@ -91,11 +91,11 @@ $$;
 
 5. Create a `application-key.yml` file in `src/main/resources` and add the following lines
 
-```bash
+```yml
 # application-key.yml
 key:
-  mail-username: ***@gmail.com
-  mail-password: **** **** **** **** 
+  mail-username: example@gmail.com
+  mail-password: pass word 1234 5678 
 ```
 
 6. Run the application
