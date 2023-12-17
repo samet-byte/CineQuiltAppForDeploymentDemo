@@ -1,4 +1,4 @@
-# CineQuiltApp-v2
+# Cine Quilt App
 
 Web Design and Applications Term Project Backend
 
