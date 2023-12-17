@@ -31,7 +31,7 @@ git clone https://github.com/samet-byte/CineQuiltAppBackend.git
 gradle build
 ```
 
-3. Create a PostgreSQL database and follow the instructions in `DB_INSTRUCTIONS.md`
+3. Create a PostgreSQL database and follow the instructions in [`DB_INSTRUCTIONS.md`](DB_INSTRUCTIONS.md)
 
 ```bash
 create database cine_demo_db2
