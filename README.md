@@ -22,7 +22,7 @@ Web Design and Applications Term Project Backend
 1. Clone the repository
 
 ```bash
-git clone
+git clone https://github.com/samet-byte/CineQuiltAppBackend.git
 ```
 
 2. Install dependencies
