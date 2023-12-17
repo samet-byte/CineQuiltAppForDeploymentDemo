@@ -94,8 +94,8 @@ $$;
 ```bash
 # application-key.yml
 key:
-  mail-username: cinequilt@gmail.com
-  mail-password: fbiv nsct kolv jopg
+  mail-username: ***@gmail.com
+  mail-password: **** **** **** **** 
 ```
 
 6. Run the application
