@@ -53,7 +53,13 @@ public class MetadataService implements IMetadataService {
             @Nullable String by,
             @Nullable String order
     ) {
-        return repository.findAllByColumnAndValue(col, val, by, order);
+        try {
+            return repository.findAllByColumnAndValue(col, val, by, order);
+        } catch (Exception e) {
+            SamTextFormat.Companion.errorMessage(e.getMessage());
+            return repository.findAll();
+
+        }
     }
 
     @Override

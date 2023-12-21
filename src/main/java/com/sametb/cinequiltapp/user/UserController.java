@@ -64,6 +64,15 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @PatchMapping("change/{country}")
+    public ResponseEntity<?> changePassword(
+            @PathVariable String country,
+            Principal connectedUser
+    ) {
+        service.changeCountry(country, connectedUser);
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping("/{username}")
     public ResponseEntity<?> delete(
             @PathVariable String username,

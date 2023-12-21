@@ -26,6 +26,8 @@ public class FavBuilder {
                 .metadataId(favourite.getMetadata().getId())
                 .title(favourite.getMetadata().getTitle())
                 .posterUrl(favourite.getMetadata().getPosterUrl())
+                .type(favourite.getMetadata().getType())
+                .releaseYear(favourite.getMetadata().getReleaseYear())
                 .build();
     }
 

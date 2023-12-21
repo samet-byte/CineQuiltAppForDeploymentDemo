@@ -3,6 +3,7 @@ package com.sametb.cinequiltapp.metadata;
 import com.sametb.cinequiltapp._custom.SamTextFormat;
 import com.sametb.cinequiltapp.exception.MetadataNotFoundException;
 import com.sametb.cinequiltapp.fav.IFavService;
+import com.sametb.cinequiltapp.tv_show.TVShowService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,6 +21,7 @@ public class MetadataController {
 
     private final MetadataService service;
     private final IFavService favoritesService;
+    private final TVShowService tvShowService;
 
 
     @PostMapping
@@ -101,6 +103,7 @@ public class MetadataController {
     ) {
         try{
             //todo: if series_delete episodes
+            tvShowService.deleteAllByMetadataId(id);
             favoritesService.deleteFavouriteByMetadataId(id);
             service.deleteMetadata(id);
             return ResponseEntity.accepted().build(); // .body(deletedMetadata); //.build();}

@@ -119,4 +119,12 @@ public class UserService implements IUserService {
         }
 
     }
+
+    @Transactional
+    @Override
+    public void changeCountry(String country, Principal connectedUser) {
+        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+        user.setCountry(country);
+        repository.save(user);
+    }
 }

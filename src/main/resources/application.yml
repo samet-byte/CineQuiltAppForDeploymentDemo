@@ -3,9 +3,11 @@ server:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/cine_demo_db2
-    username: sametbayat
-    #    password: password
+#    url: jdbc:postgresql://localhost:5432/cine_demo_db2
+#    username: sametbayat
+    url: ${g.url}
+    username: ${g.username}
+    password: ${g.password}
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:

@@ -1,5 +1,6 @@
 package com.sametb.cinequiltapp.fav;
 
+import com.sametb.cinequiltapp.metadata.RelationType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,4 +23,6 @@ public class FavResponse {
     private Integer metadataId;
     private String title;
     private String posterUrl;
+    private RelationType type;
+    private Integer releaseYear;
 }

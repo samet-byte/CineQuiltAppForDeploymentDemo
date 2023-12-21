@@ -20,12 +20,6 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class JwtService {
 
-//  @Value("${application.security.jwt.secret-key}")
-//  private String secretKey;
-//  @Value("${application.security.jwt.expiration}")
-//  private long jwtExpiration;
-//  @Value("${application.security.jwt.refresh-token.expiration}")
-//  private long refreshExpiration;
   private final ServerProperties serverProperties;
 
   public String extractUsername(String token) {
@@ -70,7 +64,6 @@ public class JwtService {
             .setHeaderParam("typ", "JWT")
             .setClaims(extraClaims)
             .setClaims(rolesClaim)
-//            .setId(UUID.randomUUID().toString()) // todo: not used
             .setAudience("cinequiltapp")
 //            .setPayload("cinequiltapp")
             .setSubject(userDetails.getUsername())

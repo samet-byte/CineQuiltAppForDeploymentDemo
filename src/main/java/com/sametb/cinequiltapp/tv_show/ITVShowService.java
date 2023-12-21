@@ -19,4 +19,6 @@ public interface ITVShowService {
     TVShow findByMetadataIdAndSeasonAndEpisode(Integer metadataId, Integer season, Integer episode);
 
     Optional<TVShow> getTVShowById(Integer id);
+
+    void deleteAllByMetadataId(Integer metadataId);
 }

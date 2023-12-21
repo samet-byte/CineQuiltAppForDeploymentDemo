@@ -73,4 +73,10 @@ public class TVShowService implements ITVShowService {
     public Optional<TVShow> getTVShowById(Integer id) {
         return tvShowRepository.findById(id);
     }
+
+
+    @Override
+    public void deleteAllByMetadataId(Integer metadataId) {
+        tvShowRepository.deleteAllByMetadataId(metadataId);
+    }
 }

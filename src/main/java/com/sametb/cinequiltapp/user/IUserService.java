@@ -1,5 +1,7 @@
 package com.sametb.cinequiltapp.user;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
@@ -28,4 +30,6 @@ public interface IUserService {
 
     Optional<User> delete(String username, DeleteUserRequest request, Principal connectedUser);
 
+    @Transactional
+    void changeCountry(String country, Principal connectedUser);
 }
