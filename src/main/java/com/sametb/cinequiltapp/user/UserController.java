@@ -55,7 +55,16 @@ public class UserController {
         return null;
    }
 
-    @PatchMapping
+    @PatchMapping("/make-admin/{username}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<?> makeAdmin(
+            @PathVariable String username
+    ) {
+        Optional<User> user = service.makeAdmin(username);
+        return ResponseEntity.ok().body(user);
+    }
+
+    @PatchMapping("change/password")
     public ResponseEntity<?> changePassword(
           @RequestBody ChangePasswordRequest request,
           Principal connectedUser

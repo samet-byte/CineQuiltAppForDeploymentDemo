@@ -31,13 +31,18 @@ public class SmtpGmailSenderService {
     private final MailContentBuilder mailContentBuilder;
 
     public void sendEmail(String toEmail, String subject, String body){
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom(mailContentBuilder.getSignature());
-        message.setTo(toEmail);
-        message.setSubject(subject);
-        message.setText(body);
-        emailSender.send(message);
-        SamTextFormat.Companion.doneMessage(String.format("Mail sent to %s", toEmail));
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom(mailContentBuilder.getSignature());
+            message.setTo(toEmail);
+            message.setSubject(subject);
+            message.setText(body);
+            emailSender.send(message);
+            SamTextFormat.Companion.doneMessage(String.format("Mail sent to %s", toEmail));
+
+        } catch (Exception e) {
+            SamTextFormat.Companion.errorMessage(String.format("Error sending mail to %s", toEmail));
+        }
     }
 
 

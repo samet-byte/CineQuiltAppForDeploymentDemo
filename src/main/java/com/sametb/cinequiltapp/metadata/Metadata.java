@@ -59,11 +59,11 @@ public class Metadata {
     private String soundtrackUrl;
 
 
-    @Column(name = "season_number", nullable = true)
+//    @Column(name = "season_number", nullable = true)
     private Integer seasonNumber;
-
-    @Column(name = "episode_number", nullable = true)
-    private Integer episodeNumber;
+//
+//    @Column(name = "episode_number", nullable = true)
+//    private Integer episodeNumber;
 
     // for logging, sorting and possible lawsuits :|
     @CreatedDate

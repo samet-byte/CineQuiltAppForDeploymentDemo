@@ -8,7 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static com.sametb.cinequiltapp.fav.FavBuilder.*;
 
@@ -85,7 +87,7 @@ public class FavController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PostMapping("/isFaved")
+    /*@PostMapping("/isFaved")
     public ResponseEntity<IsFaved> isFaved(
             @RequestBody FavRequest favRequest,
             @RequestParam(required = false) boolean changeState
@@ -109,7 +111,37 @@ public class FavController {
         }
         IsFaved isFaved =  new IsFaved(isFavedResult);
         return new ResponseEntity<>(isFaved, HttpStatus.OK);
+    }*/
+
+    @PostMapping("/isFaved")
+    public ResponseEntity<Map<String, Object>> isFaved(
+            @RequestBody FavRequest favRequest,
+            @RequestParam(required = false) boolean changeState
+    ) {
+        Favourite favourite = favouriteService.getByUserIdAndMetadataId(favRequest.getUserId(), favRequest.getMetadataId());
+
+        boolean shouldChangeState = false || changeState;
+        boolean isFavedResult = false;
+
+        if (favourite == null) {
+            if (shouldChangeState) {
+                favouriteService.saveFavourite(buildFavWithRequest(favRequest, userService, metadataService));
+                isFavedResult = true;
+            }
+        } else {
+            if (shouldChangeState) {
+                favouriteService.deleteFavourite(favourite.getId());
+            } else {
+                isFavedResult = true;
+            }
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("faved", isFavedResult);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
 
 
 

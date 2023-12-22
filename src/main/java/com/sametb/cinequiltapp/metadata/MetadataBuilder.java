@@ -30,8 +30,8 @@ public class MetadataBuilder {
                 .description(request.getDescription())
                 .genre(request.getGenre())
                 .type(relationType)
-                .seasonNumber(request.getSeason())
-                .episodeNumber(request.getEpisode())
+//                .seasonNumber(request.getSeason())
+//                .episodeNumber(request.getEpisode())
                 .build();
     }
 }

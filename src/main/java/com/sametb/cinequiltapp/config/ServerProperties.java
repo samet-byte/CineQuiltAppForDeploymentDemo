@@ -13,8 +13,7 @@ import org.springframework.context.annotation.Configuration;
  */
 
 @Configuration
-@Getter()
-
+@Getter
 public class ServerProperties {
 
     @Value("${base}")
