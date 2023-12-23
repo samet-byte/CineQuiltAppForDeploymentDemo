@@ -73,7 +73,8 @@ public class UserService implements IUserService {
     @Transactional //Transactional required when executing an update/delete query.
     public Optional<User> makeAdmin(String usernameOrEmail) {
         var user = findByUsernameOrEmail(usernameOrEmail);
-        user.setRole(Role.ADMIN);
+        if (user.getRole() == Role.ADMIN) user.setRole(Role.USER);
+        else user.setRole(Role.ADMIN);
         repository.save(user);
         return Optional.ofNullable(findByUsernameOrEmail(usernameOrEmail));
     }
