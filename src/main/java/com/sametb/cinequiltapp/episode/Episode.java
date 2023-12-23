@@ -1,12 +1,9 @@
-package com.sametb.cinequiltapp.tv_show;
+package com.sametb.cinequiltapp.episode;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.sametb.cinequiltapp.metadata.Metadata;
+import com.sametb.cinequiltapp.series.Series;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -25,25 +22,24 @@ import java.util.Objects;
  * MAYBE SOME OF 'EM. WHO KNOWS?
  */
 
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @Entity
-@Table(name = "tv_show")
-public class TVShow {
+@Table(name = "episodes")
+public class Episode {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @JsonIgnore
+//    @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "metadata_title", referencedColumnName = "title") //??id
-    @JoinColumn(name = "metadata_id", referencedColumnName = "id")
-    private Metadata metadata;
-
+    @JoinColumn(name = "series_id", referencedColumnName = "id")
+    private Series series;
 
     @Column(name = "season")
     private Integer season;
@@ -79,25 +75,25 @@ public class TVShow {
 
 
 
-    public static TVShow fromTVShowRequest(@NotNull TVShowRequest tvShowRequest, Metadata metadata) {
-        return TVShow.builder()
-                .metadata(metadata)
-                .season(tvShowRequest.getSeason())
-                .episode(tvShowRequest.getEpisode())
-                .title(tvShowRequest.getTitle())
-                .videoUrl(tvShowRequest.getVideoUrl())
-                .description(tvShowRequest.getDescription())
+    public static Episode fromTVShowRequest(@NotNull EpisodeRequest episodeRequest, Series series) {
+        return Episode.builder()
+                .series(series)
+                .season(episodeRequest.getSeason())
+                .episode(episodeRequest.getEpisode())
+                .title(episodeRequest.getTitle())
+                .videoUrl(episodeRequest.getVideoUrl())
+                .description(episodeRequest.getDescription())
                 .build();
     }
 
 
-    public static boolean areSame(TVShowRequest request, TVShow tvShow) {
-        if (request == null || tvShow == null) { return true; }
-        boolean titlesEqual = Objects.equals(request.getTitle(), tvShow.getTitle());
-        boolean descriptionsEqual = Objects.equals(request.getDescription(), tvShow.getDescription());
-        boolean seasonsEqual = Objects.equals(request.getSeason(), tvShow.getSeason());
-        boolean episodesEqual = Objects.equals(request.getEpisode(), tvShow.getEpisode());
-        boolean videoUrlsEqual = Objects.equals(request.getVideoUrl(), tvShow.getVideoUrl());
+    public static boolean areSame(EpisodeRequest request, Episode episode) {
+        if (request == null || episode == null) { return true; }
+        boolean titlesEqual = Objects.equals(request.getTitle(), episode.getTitle());
+        boolean descriptionsEqual = Objects.equals(request.getDescription(), episode.getDescription());
+        boolean seasonsEqual = Objects.equals(request.getSeason(), episode.getSeason());
+        boolean episodesEqual = Objects.equals(request.getEpisode(), episode.getEpisode());
+        boolean videoUrlsEqual = Objects.equals(request.getVideoUrl(), episode.getVideoUrl());
 
         return titlesEqual && descriptionsEqual && seasonsEqual && episodesEqual && videoUrlsEqual;
     }

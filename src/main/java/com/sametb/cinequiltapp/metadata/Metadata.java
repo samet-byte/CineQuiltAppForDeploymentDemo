@@ -3,12 +3,11 @@ package com.sametb.cinequiltapp.metadata;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sametb.cinequiltapp.fav.Favourite;
-import com.sametb.cinequiltapp.tv_show.TVShow;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -19,19 +18,23 @@ import java.time.LocalDateTime;
 import java.util.Set;
 
 @Data
-@Builder
+//@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "metadatas")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Metadata {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JoinColumn(name = "metadata_id")
     private Integer id; // UUID?
 
     @Column(name = "title", nullable = false) // length = 255 default
+    @JoinColumn(name = "metadata_title")
     private String title;
 
     @Column(name = "director")
@@ -60,7 +63,7 @@ public class Metadata {
 
 
 //    @Column(name = "season_number", nullable = true)
-    private Integer seasonNumber;
+//    private Integer seasonNumber;
 //
 //    @Column(name = "episode_number", nullable = true)
 //    private Integer episodeNumber;
@@ -73,7 +76,6 @@ public class Metadata {
     @LastModifiedDate
     @Column(insertable = false)
     private LocalDateTime lastModified;
-
 
     @CreatedBy
     @Column(nullable = false, updatable = false)
@@ -101,15 +103,15 @@ public class Metadata {
             })
     private Set<Favourite> favourites;
 
-
-    @JsonIgnore
-    @OneToMany(
-            mappedBy = "metadata",
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.DETACH,
-                    CascadeType.REFRESH,
-            })
-    private Set<TVShow> TVShows;
+//
+//    @JsonIgnore
+//    @OneToMany(
+//            mappedBy = "metadata",
+//            cascade = {
+//                    CascadeType.PERSIST,
+//                    CascadeType.DETACH,
+//                    CascadeType.REFRESH,
+//            })
+//    private Set<TVShow> TVShows;
 
 }

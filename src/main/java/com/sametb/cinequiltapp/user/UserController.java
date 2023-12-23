@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("${endpoint.users}")
 @RequiredArgsConstructor
 //@CrossOrigin("*")
 @CrossOrigin("http://localhost:3000")

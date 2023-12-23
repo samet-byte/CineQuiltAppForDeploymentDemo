@@ -26,8 +26,8 @@ import java.io.File;
 @RequiredArgsConstructor
 public class SmtpGmailSenderService {
 
-    @Autowired
-    private JavaMailSender emailSender;
+//    @Autowired
+    private final JavaMailSender emailSender;
     private final MailContentBuilder mailContentBuilder;
 
     public void sendEmail(String toEmail, String subject, String body){

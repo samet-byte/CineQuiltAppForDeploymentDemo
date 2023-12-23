@@ -1,14 +1,17 @@
 package com.sametb.cinequiltapp.metadata;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import java.util.List;
 
 @Getter
 @Setter
-@Builder
+//@Builder
+@SuperBuilder
+//@AllArgsConstructor
+//@NoArgsConstructor
+@RequiredArgsConstructor
 public class MetadataRequest {
     private Integer id;
     private String title;

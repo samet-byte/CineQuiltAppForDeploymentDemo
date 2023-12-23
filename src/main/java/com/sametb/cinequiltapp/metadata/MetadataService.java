@@ -1,5 +1,6 @@
 package com.sametb.cinequiltapp.metadata;
 
+import com.sametb.cinequiltapp._custom.BusinessHelper;
 import com.sametb.cinequiltapp._custom.SamTextFormat;
 import com.sametb.cinequiltapp.exception.MetadataAlreadyExistsException;
 import com.sametb.cinequiltapp.exception.MetadataNotFoundException;
@@ -117,7 +118,7 @@ public class MetadataService implements IMetadataService {
         Metadata uMetadata = repository.findById(id).orElseThrow();
 
         // Use BeanUtils to copy non-null properties from updatedMetadata to uMetadata
-        BeanUtils.copyProperties(updatedMetadata, uMetadata, getNullPropertyNames(updatedMetadata));
+        BeanUtils.copyProperties(updatedMetadata, uMetadata, BusinessHelper.getNullPropertyNames(updatedMetadata));
 
         // Check if any changes were made before saving
         boolean changesMade = !uMetadata.equals(updatedMetadata);
@@ -131,21 +132,21 @@ public class MetadataService implements IMetadataService {
         }
     }
 
-    // Helper method to get null property names of an object
-    @NotNull
-    private String[] getNullPropertyNames(Object source) {
-        final BeanWrapper src = new BeanWrapperImpl(source);
-        java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
-
-        Set<String> emptyNames = new HashSet<>();
-        for (java.beans.PropertyDescriptor pd : pds) {
-            // Check if value is null and add the property name to the set
-            if (src.getPropertyValue(pd.getName()) == null) {
-                emptyNames.add(pd.getName());
-            }
-        }
-
-        String[] result = new String[emptyNames.size()];
-        return emptyNames.toArray(result);
-    }
+//    // Helper method to get null property names of an object
+//    @NotNull
+//    private String[] getNullPropertyNames(Object source) {
+//        final BeanWrapper src = new BeanWrapperImpl(source);
+//        java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
+//
+//        Set<String> emptyNames = new HashSet<>();
+//        for (java.beans.PropertyDescriptor pd : pds) {
+//            // Check if value is null and add the property name to the set
+//            if (src.getPropertyValue(pd.getName()) == null) {
+//                emptyNames.add(pd.getName());
+//            }
+//        }
+//
+//        String[] result = new String[emptyNames.size()];
+//        return emptyNames.toArray(result);
+//    }
 }

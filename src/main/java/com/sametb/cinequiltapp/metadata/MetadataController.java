@@ -3,7 +3,7 @@ package com.sametb.cinequiltapp.metadata;
 import com.sametb.cinequiltapp._custom.SamTextFormat;
 import com.sametb.cinequiltapp.exception.MetadataNotFoundException;
 import com.sametb.cinequiltapp.fav.IFavService;
-import com.sametb.cinequiltapp.tv_show.TVShowService;
+import com.sametb.cinequiltapp.episode.EpisodeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,13 +15,13 @@ import static com.sametb.cinequiltapp._custom.CustomFunsKt.decodeString;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/metadatas")
+@RequestMapping("${endpoint.metadatas}")
 @CrossOrigin("http://localhost:3000")
 public class MetadataController {
 
     private final MetadataService service;
     private final IFavService favoritesService;
-    private final TVShowService tvShowService;
+    private final EpisodeService episodeService;
 
 
     @PostMapping
@@ -47,7 +47,7 @@ public class MetadataController {
         return ResponseEntity.ok(service.findAll());
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("${endpoint.api.id}")
     public ResponseEntity<Metadata> findById(@PathVariable Integer id) {
         return ResponseEntity.ok(service.findById(id));
     }
@@ -103,7 +103,7 @@ public class MetadataController {
     ) {
         try{
             //todo: if series_delete episodes
-            tvShowService.deleteAllByMetadataId(id);
+            episodeService.deleteAllBySeriesId(id);
             favoritesService.deleteFavouriteByMetadataId(id);
             service.deleteMetadata(id);
             return ResponseEntity.accepted().build(); // .body(deletedMetadata); //.build();}

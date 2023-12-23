@@ -21,7 +21,7 @@ import static com.sametb.cinequiltapp.metadata.paging_sorting.SortMetadata.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/metadatas/search")
+@RequestMapping("${endpoint.metadatas-search}")
 @CrossOrigin("http://localhost:3000")
 public class MetadataPagingSortingController {
 

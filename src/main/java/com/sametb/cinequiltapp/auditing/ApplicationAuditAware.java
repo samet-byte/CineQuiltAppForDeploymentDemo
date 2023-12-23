@@ -31,6 +31,7 @@ import java.util.Optional;
                         .getAuthentication();
         if (authentication == null ||
             !authentication.isAuthenticated() ||
+                // added for further usage our app not supports anonymous auth yet
                 authentication instanceof AnonymousAuthenticationToken
         ) {
             return Optional.empty();

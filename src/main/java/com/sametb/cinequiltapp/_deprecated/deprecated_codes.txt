@@ -611,3 +611,23 @@ private String buildToken(
 
 
 .......................................................................................................................
+
+
+
+
+//    @Query("SELECT tv FROM Episode tv GROUP BY tv, tv.metadata.id")
+//    List<Object[]> getAllTVShowsGroupByTitle();
+
+
+//    @Query("SELECT new com.sametb.cinequiltapp.episode.EpisodeResponse(tv.metadata.id, tv.metadata.title, tv.id, tv. season, tv.episode, tv.title, tv.videoUrl, tv.description) FROM Episode tv WHERE tv.metadata.id = :metadataId GROUP BY tv, tv.metadata.id, tv.metadata.title, tv.season")
+//    List<Object []> getTVShowsGroupBySeasonWhereMetadataId(Integer metadataId);
+
+
+//    List<Episode> findAllByMetadataIdAndSeason(Integer metadataId, Integer season);
+
+
+
+//    public List<Object[]> getAllTVShowsGroupByTitle() {
+//        return tvShowRepository.getAllTVShowsGroupByTitle();
+//    }
+

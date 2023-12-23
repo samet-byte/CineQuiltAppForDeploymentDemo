@@ -17,7 +17,7 @@ import static com.sametb.cinequiltapp._custom.CustomFunsKt.prettyJsonMaker;
 
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("${endpoint.auth}")
 @RequiredArgsConstructor
 @CrossOrigin("http://localhost:3000")
 public class AuthenticationController {

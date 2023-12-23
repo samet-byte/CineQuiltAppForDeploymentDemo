@@ -16,8 +16,6 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class TokenBuilder {
-
-
     public static Token buildTokenWithUserAndJwtToken(
             @NonNull User user,
             @NonNull String jwtToken

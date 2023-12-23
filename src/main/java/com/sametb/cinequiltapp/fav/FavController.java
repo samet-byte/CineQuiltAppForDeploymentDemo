@@ -24,7 +24,7 @@ import static com.sametb.cinequiltapp.fav.FavBuilder.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/favs")
+@RequestMapping("${endpoint.favs}")
 @CrossOrigin("http://localhost:3000")
 public class FavController {
 

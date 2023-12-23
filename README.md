@@ -37,7 +37,7 @@ gradle build
 create database cine_demo_db2
 ```
 
-4Create a `application-key.yml` file in `src/main/resources` and add the following lines
+4. Create a `application-key.yml` file in `src/main/resources` and add the following lines
 
 ```yml
 # application-key.yml
@@ -70,3 +70,44 @@ gradle bootRun
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+
+# API Documentation
+
+## Base URL
+`/api/v1`
+
+## Authentication
+- **Endpoint:**
+    - `/auth`
+        - **Logout:**
+            - `POST api/v1/auth/logout`
+
+## Demo
+- **Management:**
+    - `GET api/v1/management/**`
+
+## User Operations
+- **Users:**
+    - `GET api/v1/users`
+
+## Metadata Operations
+- **Metadatas:**
+    - `GET api/v1/metadatas`
+    - **Search:**
+        - `GET api/v1/metadatas/search`
+
+## Favorites
+- **Favs:**
+    - `GET api/v1/favs`
+
+## Series Operations
+- **Series:**
+    - `GET api/v1/series`
+- **Episode:**
+    - `GET api/v1/series/episode`
+
+## API Operations
+- **ID:**
+    - `GET ../{id}`
+- **IP:**
+    - `GET api/v1/ip`

@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import static com.sametb.cinequiltapp._custom.BusinessHelper.getServerIp;
+
 /**
  * @author Samet Bayat.
  * Date: 3.12.2023 4:13 AM
@@ -18,17 +20,11 @@ import java.net.UnknownHostException;
  */
 
 @RestController
-@RequestMapping("/api/v1")
+@RequestMapping("${base}")
 @CrossOrigin("http://localhost:3000")
 public class ApiController {
-    @GetMapping("/ip")
-    public String getServerIp() {
-        try {
-            InetAddress inetAddress = InetAddress.getLocalHost();
-            return inetAddress.getHostAddress();
-        } catch (UnknownHostException e) {
-            SamTextFormat.Companion.errorMessage("Error getting IP address: " + e.getMessage());
-            return "Unable to retrieve IP address";
-        }
+    @GetMapping("${endpoint.api.ip}")
+    public String serverIp() {
+        return getServerIp();
     }
 }

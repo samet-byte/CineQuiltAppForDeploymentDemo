@@ -1,4 +1,4 @@
-package com.sametb.cinequiltapp.tv_show;
+package com.sametb.cinequiltapp.episode;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,13 +17,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TVShowRequest {
-
+public class EpisodeRequest {
     private Integer metadataId;
     private Integer season;
     private Integer episode;
     private String title;
     private String videoUrl;
     private String description;
-
 }
