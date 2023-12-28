@@ -61,12 +61,9 @@ public class Metadata {
     @Column(name = "soundtrack_url", nullable = true)
     private String soundtrackUrl;
 
+    @Column(name = "background_image_url ", nullable = true)
+    private String backgroundImageUrl;
 
-//    @Column(name = "season_number", nullable = true)
-//    private Integer seasonNumber;
-//
-//    @Column(name = "episode_number", nullable = true)
-//    private Integer episodeNumber;
 
     // for logging, sorting and possible lawsuits :|
     @CreatedDate
@@ -102,16 +99,4 @@ public class Metadata {
                     CascadeType.REFRESH,
             })
     private Set<Favourite> favourites;
-
-//
-//    @JsonIgnore
-//    @OneToMany(
-//            mappedBy = "metadata",
-//            cascade = {
-//                    CascadeType.PERSIST,
-//                    CascadeType.DETACH,
-//                    CascadeType.REFRESH,
-//            })
-//    private Set<TVShow> TVShows;
-
 }

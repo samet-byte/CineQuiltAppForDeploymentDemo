@@ -47,7 +47,7 @@ public class MetadataController {
         return ResponseEntity.ok(service.findAll());
     }
 
-    @GetMapping("${endpoint.api.id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Metadata> findById(@PathVariable Integer id) {
         return ResponseEntity.ok(service.findById(id));
     }
@@ -66,7 +66,6 @@ public class MetadataController {
             return ResponseEntity.notFound().build();
         }
     }
-
 
     @GetMapping("/director/{director}")
     public ResponseEntity<List<Metadata>> findByDirector(@PathVariable String director) {

@@ -15,12 +15,5 @@ import org.springframework.data.repository.PagingAndSortingRepository;
  */
 
 public interface MetadataPagingSortingRepository extends PagingAndSortingRepository<Metadata, Integer> {
-
-
     Page<Metadata> getAllByType(RelationType type, Pageable pageable);
-
-
-
-
-
 }

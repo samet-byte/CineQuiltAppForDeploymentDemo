@@ -24,6 +24,7 @@ public class MetadataRequest {
     private String videoUrl;
     private String trailerUrl;
     private String soundtrackUrl;
+    private String backgroundImageUrl;
     private RelationType type;
     private Integer season;
     private Integer episode;

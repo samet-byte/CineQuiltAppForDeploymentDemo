@@ -38,6 +38,7 @@ public class SeriesBuilder {
                 .videoUrl(seriesRequest.getVideoUrl())
                 .trailerUrl(seriesRequest.getTrailerUrl())
                 .soundtrackUrl(seriesRequest.getSoundtrackUrl())
+                .backgroundImageUrl(seriesRequest.getBackgroundImageUrl())
                 .description(seriesRequest.getDescription())
                 .genre(seriesRequest.getGenre())
                 .type(RelationType.TV_SHOW)

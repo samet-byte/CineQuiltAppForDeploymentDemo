@@ -27,6 +27,7 @@ public class MetadataBuilder {
                 .videoUrl(request.getVideoUrl())
                 .trailerUrl(request.getTrailerUrl())
                 .soundtrackUrl(request.getSoundtrackUrl())
+                .backgroundImageUrl(request.getBackgroundImageUrl())
                 .description(request.getDescription())
                 .genre(request.getGenre())
                 .type(relationType)

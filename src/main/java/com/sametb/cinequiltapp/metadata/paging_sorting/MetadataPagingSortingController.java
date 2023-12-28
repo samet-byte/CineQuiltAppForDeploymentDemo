@@ -42,7 +42,9 @@ public class MetadataPagingSortingController {
                     Sort.Order.by(SORT_BY_TITLE.getValue()),
                     Sort.Order.by(SORT_BY_DIRECTOR.getValue()),
                     Sort.Order.by(SORT_BY_RELEASE_YEAR.getValue()),
-                    Sort.Order.by(SORT_BY_DURATION.getValue())
+                    Sort.Order.by(SORT_BY_DURATION.getValue()),
+                    Sort.Order.by(SORT_BY_GENRE.getValue()),
+                    Sort.Order.by(SORT_BY_CREATE_DATE.getValue())
             );
 
 

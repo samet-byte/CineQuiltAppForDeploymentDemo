@@ -19,7 +19,8 @@ public enum SortMetadata {
     SORT_BY_ID("id"),
     SORT_BY_TYPE("type"),
     SORT_BY_DURATION("duration"),
-    SORT_BY_GENRE("genre");
+    SORT_BY_GENRE("genre"),
+    SORT_BY_CREATE_DATE("createDate");
 
     private final String value;
 }

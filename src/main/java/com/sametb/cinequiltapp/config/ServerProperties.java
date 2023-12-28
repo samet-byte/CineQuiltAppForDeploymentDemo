@@ -55,4 +55,8 @@ public class ServerProperties {
 
     @Value("${api-allow-all}")
     private String apiAllowAll;
+
+
+    @Value("${gpt.api-key}")
+    private String gptApiKey;
 }
