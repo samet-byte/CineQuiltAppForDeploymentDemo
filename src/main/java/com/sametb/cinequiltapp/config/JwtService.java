@@ -1,35 +1,32 @@
-package com.alibou.security.config;
+package com.sametb.cinequiltapp.config;
+
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import java.security.Key;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
-
+import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.security.Key;
+import java.util.*;
+import java.util.function.Function;
+
 @Service
+@RequiredArgsConstructor
 public class JwtService {
 
-  @Value("${application.security.jwt.secret-key}")
-  private String secretKey;
-  @Value("${application.security.jwt.expiration}")
-  private long jwtExpiration;
-  @Value("${application.security.jwt.refresh-token.expiration}")
-  private long refreshExpiration;
+  private final ServerProperties serverProperties;
 
   public String extractUsername(String token) {
     return extractClaim(token, Claims::getSubject);
   }
 
-  public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+  public <T> T extractClaim(String token, @NotNull Function<Claims, T> claimsResolver) {
     final Claims claims = extractAllClaims(token);
     return claimsResolver.apply(claims);
   }
@@ -42,23 +39,33 @@ public class JwtService {
       Map<String, Object> extraClaims,
       UserDetails userDetails
   ) {
-    return buildToken(extraClaims, userDetails, jwtExpiration);
+    return buildToken(extraClaims, userDetails, serverProperties.getJwtExpiration());
   }
 
   public String generateRefreshToken(
       UserDetails userDetails
   ) {
-    return buildToken(new HashMap<>(), userDetails, refreshExpiration);
+    return buildToken(new HashMap<>(), userDetails, serverProperties.getJwtExpiration());
   }
 
   private String buildToken(
           Map<String, Object> extraClaims,
-          UserDetails userDetails,
+          @NotNull UserDetails userDetails,
           long expiration
   ) {
+
+    List<String> roles = new ArrayList<>();
+    Map<String, Object> rolesClaim = new HashMap<>();
+    userDetails.getAuthorities().forEach(a -> roles.add(a.getAuthority()));
+    rolesClaim.put("roles", roles);
+
     return Jwts
             .builder()
+            .setHeaderParam("typ", "JWT")
             .setClaims(extraClaims)
+            .setClaims(rolesClaim)
+            .setAudience("cinequiltapp")
+//            .setPayload("cinequiltapp")
             .setSubject(userDetails.getUsername())
             .setIssuedAt(new Date(System.currentTimeMillis()))
             .setExpiration(new Date(System.currentTimeMillis() + expiration))
@@ -66,7 +73,7 @@ public class JwtService {
             .compact();
   }
 
-  public boolean isTokenValid(String token, UserDetails userDetails) {
+  public boolean isTokenValid(String token, @NotNull UserDetails userDetails) {
     final String username = extractUsername(token);
     return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
   }
@@ -88,8 +95,9 @@ public class JwtService {
         .getBody();
   }
 
+  @NotNull
   private Key getSignInKey() {
-    byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+    byte[] keyBytes = Decoders.BASE64.decode(serverProperties.getSecretKey());
     return Keys.hmacShaKeyFor(keyBytes);
   }
 }

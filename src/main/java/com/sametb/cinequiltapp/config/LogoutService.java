@@ -1,9 +1,10 @@
-package com.alibou.security.config;
+package com.sametb.cinequiltapp.config;
 
-import com.alibou.security.token.TokenRepository;
+import com.sametb.cinequiltapp.token.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
@@ -13,27 +14,26 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class LogoutService implements LogoutHandler {
 
-  private final TokenRepository tokenRepository;
+    private final TokenRepository tokenRepository;
+    private final ServerProperties serverProperties;
 
-  @Override
-  public void logout(
-      HttpServletRequest request,
-      HttpServletResponse response,
-      Authentication authentication
-  ) {
-    final String authHeader = request.getHeader("Authorization");
-    final String jwt;
-    if (authHeader == null ||!authHeader.startsWith("Bearer ")) {
-      return;
+    @Override
+    public void logout(
+            @NotNull
+            HttpServletRequest request,
+            HttpServletResponse response,
+            Authentication authentication
+    ) {
+        final String authHeader = request.getHeader(serverProperties.getAuthorizationHeader());
+        final String jwt;
+        if (authHeader == null || !authHeader.startsWith(serverProperties.getBearer_())) return;
+        jwt = authHeader.substring(7);
+        var storedToken = tokenRepository.findByToken(jwt).orElse(null);
+        if (storedToken != null) {
+            storedToken.setExpired(true);
+            storedToken.setRevoked(true);
+            tokenRepository.save(storedToken);
+            SecurityContextHolder.clearContext();
+        }
     }
-    jwt = authHeader.substring(7);
-    var storedToken = tokenRepository.findByToken(jwt)
-        .orElse(null);
-    if (storedToken != null) {
-      storedToken.setExpired(true);
-      storedToken.setRevoked(true);
-      tokenRepository.save(storedToken);
-      SecurityContextHolder.clearContext();
-    }
-  }
 }

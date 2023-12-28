@@ -1,4 +1,4 @@
-package com.alibou.security.config;
+package com.sametb.cinequiltapp.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
@@ -13,12 +13,12 @@ import io.swagger.v3.oas.annotations.servers.Server;
 @OpenAPIDefinition(
         info = @Info(
                 contact = @Contact(
-                        name = "Alibou",
-                        email = "contact@aliboucoding.com",
-                        url = "https://aliboucoding.com/course"
+                        name = "Sam",
+                        email = "cinequilt@gmail.com",
+                        url = "https://sametb.com/bil387-project"
                 ),
                 description = "OpenApi documentation for Spring Security",
-                title = "OpenApi specification - Alibou",
+                title = "OpenApi specification - Sam",
                 version = "1.0",
                 license = @License(
                         name = "Licence name",
@@ -33,7 +33,7 @@ import io.swagger.v3.oas.annotations.servers.Server;
                 ),
                 @Server(
                         description = "PROD ENV",
-                        url = "https://aliboucoding.com/course"
+                        url = "https://sametb.com/bil387-project"
                 )
         },
         security = {

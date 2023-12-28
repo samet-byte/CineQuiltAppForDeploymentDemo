@@ -1,7 +1,9 @@
-package com.alibou.security.user;
+package com.sametb.cinequiltapp.user;
 
+import com.sametb.cinequiltapp.user.Permission;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Collections;
@@ -9,15 +11,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.alibou.security.user.Permission.ADMIN_CREATE;
-import static com.alibou.security.user.Permission.ADMIN_DELETE;
-import static com.alibou.security.user.Permission.ADMIN_READ;
-import static com.alibou.security.user.Permission.ADMIN_UPDATE;
-import static com.alibou.security.user.Permission.MANAGER_CREATE;
-import static com.alibou.security.user.Permission.MANAGER_DELETE;
-import static com.alibou.security.user.Permission.MANAGER_READ;
-import static com.alibou.security.user.Permission.MANAGER_UPDATE;
+import static com.sametb.cinequiltapp.user.Permission.*;
 
+
+@Getter
 @RequiredArgsConstructor
 public enum Role {
 
@@ -41,13 +38,11 @@ public enum Role {
                   MANAGER_DELETE,
                   MANAGER_CREATE
           )
-  )
+  );
 
-  ;
-
-  @Getter
   private final Set<Permission> permissions;
 
+  @NotNull
   public List<SimpleGrantedAuthority> getAuthorities() {
     var authorities = getPermissions()
             .stream()

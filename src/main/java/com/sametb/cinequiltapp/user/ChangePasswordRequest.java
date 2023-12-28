@@ -1,4 +1,4 @@
-package com.alibou.security.user;
+package com.sametb.cinequiltapp.user;
 
 import lombok.Builder;
 import lombok.Getter;

@@ -1,8 +1,8 @@
-package com.alibou.security.config;
+package com.sametb.cinequiltapp.config;
 
-import com.alibou.security.auditing.ApplicationAuditAware;
-import com.alibou.security.user.UserRepository;
-import jakarta.persistence.criteria.CriteriaBuilder;
+
+import com.sametb.cinequiltapp.auditing.ApplicationAuditAware;
+import com.sametb.cinequiltapp.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +24,7 @@ public class ApplicationConfig {
 
   @Bean
   public UserDetailsService userDetailsService() {
-    return username -> repository.findByEmail(username)
+    return usernameOrEmail -> repository.findByUsernameOrEmail(usernameOrEmail, usernameOrEmail)
         .orElseThrow(() -> new UsernameNotFoundException("User not found"));
   }
 

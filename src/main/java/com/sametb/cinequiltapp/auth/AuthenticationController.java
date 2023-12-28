@@ -1,43 +1,90 @@
-package com.alibou.security.auth;
+package com.sametb.cinequiltapp.auth;
 
+import com.sametb.cinequiltapp._custom.SamTextFormat;
+import com.sametb.cinequiltapp.config.ServerProperties;
+import com.sametb.cinequiltapp.mail.SmtpGmailSenderService;
+import com.sametb.cinequiltapp.config.LogoutService;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 
+import static com.sametb.cinequiltapp._custom.CustomFunsKt.prettyJsonMaker;
+
+
+
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("${endpoint.auth}")
 @RequiredArgsConstructor
+@CrossOrigin("http://localhost:3000")
 public class AuthenticationController {
 
-  private final AuthenticationService service;
+    private final AuthenticationService service;
+    private final LogoutService logoutService;
+    private final SmtpGmailSenderService gmailSenderService;
+    private final ServerProperties serverProperties;
 
-  @PostMapping("/register")
-  public ResponseEntity<AuthenticationResponse> register(
+    @PostMapping("/register")
+    public ResponseEntity<AuthenticationResponse> register(
       @RequestBody RegisterRequest request
-  ) {
-    return ResponseEntity.ok(service.register(request));
-  }
-  @PostMapping("/authenticate")
-  public ResponseEntity<AuthenticationResponse> authenticate(
-      @RequestBody AuthenticationRequest request
-  ) {
-    return ResponseEntity.ok(service.authenticate(request));
-  }
+    ) {
+    try {
+      AuthenticationResponse authenticationResponse = service.register(request);
+        try{
+          gmailSenderService.defaultRegisterMail(request.getEmail(), request.getUsername());
+        } catch (Exception e){
+            SamTextFormat.Companion.errorMessage("Error sending email: " + e.getMessage());
+        }
+      return ResponseEntity.ok(authenticationResponse);
+    } catch (Exception e) {
+      SamTextFormat.Companion.create(e.getMessage()).red().bold().print();
+      return ResponseEntity.badRequest().build();
+    }
+    }
 
-  @PostMapping("/refresh-token")
-  public void refreshToken(
-      HttpServletRequest request,
-      HttpServletResponse response
-  ) throws IOException {
-    service.refreshToken(request, response);
-  }
+    @PostMapping("/authenticate")
+    public ResponseEntity<?> authenticate(
+          @RequestBody AuthenticationRequest request,
+          @NotNull HttpServletResponse response
+    ) {
+        AuthenticationResponse authenticationResponse = service.authenticate(request);
+        Cookie cookie = new Cookie("refreshToken", authenticationResponse.getRefreshToken());
+    //    cookie.setHttpOnly(true); // This makes the cookie accessible only through the HTTP protocol
+        cookie.setMaxAge(7 * 24 * 60 * 60); // Set the expiration time in seconds (adjust as needed)
+        cookie.setPath("/"); // Set the cookie path (adjust as needed)
+        response.addCookie(cookie);
 
+        Cookie gApiCookie = new Cookie("gpt_api_key", serverProperties.getGptApiKey()); // Set the value accordingly
+        gApiCookie.setMaxAge(7 * 24 * 60 * 60); // Set the expiration time in seconds (adjust as needed)
+        gApiCookie.setPath("/"); // Set the cookie path (adjust as needed)
+        response.addCookie(gApiCookie);
 
+        try {
+            String prettyOutput = prettyJsonMaker(authenticationResponse);
+            return ResponseEntity.ok(prettyOutput);
+        }catch (Exception e){
+          SamTextFormat.Companion.errorMessage("Error: " + e.getMessage());
+          return ResponseEntity.ok(authenticationResponse);
+        }
+    }
+
+    @GetMapping("/refresh")
+    public ResponseEntity<AuthenticationResponse> refreshToken(
+      HttpServletRequest request
+    ) {
+    AuthenticationResponse responseRefresh = service.refreshToken(request);
+    return ResponseEntity.ok(responseRefresh);
+    }
+
+    @PostMapping("/logout")
+    public void logout(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) {
+        logoutService.logout(request, response, null);
+    }
 }
