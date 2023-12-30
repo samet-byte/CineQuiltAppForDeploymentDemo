@@ -4,7 +4,6 @@ import com.sametb.cinequiltapp._custom.SamTextFormat;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -21,12 +20,12 @@ import java.io.File;
  * MAYBE SOME OF 'EM. WHO KNOWS?
  */
 
+// mail
 
 @Service
 @RequiredArgsConstructor
 public class SmtpGmailSenderService {
 
-//    @Autowired
     private final JavaMailSender emailSender;
     private final MailContentBuilder mailContentBuilder;
 
@@ -34,13 +33,14 @@ public class SmtpGmailSenderService {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(mailContentBuilder.getSignature());
-            message.setTo(toEmail);
-            message.setSubject(subject);
-            message.setText(body);
+            message.setTo(toEmail.trim());
+            message.setSubject(subject.trim());
+            message.setText(body.trim());
             emailSender.send(message);
             SamTextFormat.Companion.doneMessage(String.format("Mail sent to %s", toEmail));
 
         } catch (Exception e) {
+            e.printStackTrace();
             SamTextFormat.Companion.errorMessage(String.format("Error sending mail to %s", toEmail));
         }
     }
@@ -102,12 +102,11 @@ public class SmtpGmailSenderService {
         String subject = mailContentBuilder.subjectBuilder(username);
         String body = mailContentBuilder.bodyBuilder(username);
 
-        sendEmailWithImageAndLink(
+
+        sendEmail(
                 toEmail,
                 subject,
-                body,
-                mailContentBuilder.getMailImage(),
-                mailContentBuilder.getDirectLink()
+                body
         );
     }
 
@@ -117,3 +116,12 @@ public class SmtpGmailSenderService {
         sendEmail(toEmail, subject, body);
     }
 }
+
+
+//        sendEmailWithImageAndLink(
+//                toEmail,
+//                subject,
+//                body,
+//                mailContentBuilder.getMailImage(),
+//                mailContentBuilder.getDirectLink()
+//        );
