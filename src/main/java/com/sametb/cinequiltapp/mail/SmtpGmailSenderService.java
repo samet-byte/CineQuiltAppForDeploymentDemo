@@ -25,11 +25,10 @@ import java.io.File;
 @Service
 @RequiredArgsConstructor
 public class SmtpGmailSenderService {
-
-//    @Autowired
-    private final JavaMailSender emailSender;
+    
     private final MailContentBuilder mailContentBuilder;
-
+    private final JavaMailSender emailSender;
+    
     public void sendEmail(String toEmail, String subject, String body){
         try {
             SimpleMailMessage message = new SimpleMailMessage();
