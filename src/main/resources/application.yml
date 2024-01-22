@@ -8,9 +8,9 @@ spring:
 #    url: ${g.url}
 #    username: ${g.username}
 #    password: ${g.password}
-    url: jdbc:postgresql://cornelius.db.elephantsql.com:5432/ojhupmoe
-    username: ojhupmoe
-    password: TBvjYLXCSUp13II4iie0YLay6tUVc-wL
+    url: jdbc:postgresql://dpg-cm467imn7f5s73btifv0-a.frankfurt-postgres.render.com/cine_demo_db
+    username: sam
+    password: zbrOradRPEKCuSj6oq99S9FLgAE6sfRN
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
