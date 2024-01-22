@@ -1,6 +1,7 @@
 package com.sametb.cinequiltapp.config;
 
 
+import com.sametb.cinequiltapp.ServerStuff;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -8,7 +9,6 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +20,7 @@ import java.util.function.Function;
 @RequiredArgsConstructor
 public class JwtService {
 
-  private final ServerProperties serverProperties;
+//  private final ServerProperties serverProperties;
 
   public String extractUsername(String token) {
     return extractClaim(token, Claims::getSubject);
@@ -39,13 +39,14 @@ public class JwtService {
       Map<String, Object> extraClaims,
       UserDetails userDetails
   ) {
-    return buildToken(extraClaims, userDetails, serverProperties.getJwtExpiration());
+//    return buildToken(extraClaims, userDetails, serverProperties.getJwtExpiration());
+    return buildToken(extraClaims, userDetails, ServerStuff.jwtExp);
   }
 
   public String generateRefreshToken(
       UserDetails userDetails
   ) {
-    return buildToken(new HashMap<>(), userDetails, serverProperties.getJwtExpiration());
+    return buildToken(new HashMap<>(), userDetails, ServerStuff.jwtExp);
   }
 
   private String buildToken(
@@ -97,7 +98,7 @@ public class JwtService {
 
   @NotNull
   private Key getSignInKey() {
-    byte[] keyBytes = Decoders.BASE64.decode(serverProperties.getSecretKey());
+    byte[] keyBytes = Decoders.BASE64.decode(ServerStuff.secretKey);
     return Keys.hmacShaKeyFor(keyBytes);
   }
 }

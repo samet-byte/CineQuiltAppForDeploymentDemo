@@ -1,5 +1,6 @@
 package com.sametb.cinequiltapp.config;
 
+import com.sametb.cinequiltapp.ServerStuff;
 import com.sametb.cinequiltapp.token.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Service;
 public class LogoutService implements LogoutHandler {
 
     private final TokenRepository tokenRepository;
-    private final ServerProperties serverProperties;
+//    private final ServerProperties serverProperties;
 
     @Override
     public void logout(
@@ -24,9 +25,9 @@ public class LogoutService implements LogoutHandler {
             HttpServletResponse response,
             Authentication authentication
     ) {
-        final String authHeader = request.getHeader(serverProperties.getAuthorizationHeader());
+        final String authHeader = request.getHeader(ServerStuff.authorizationHeader);
         final String jwt;
-        if (authHeader == null || !authHeader.startsWith(serverProperties.getBearer_())) return;
+        if (authHeader == null || !authHeader.startsWith(ServerStuff.bearer_)) return;
         jwt = authHeader.substring(7);
         var storedToken = tokenRepository.findByToken(jwt).orElse(null);
         if (storedToken != null) {

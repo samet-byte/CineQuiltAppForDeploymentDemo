@@ -27,7 +27,7 @@ import static com.sametb.cinequiltapp.metadata.paging_sorting.SortMetadata.*;
 @CrossOrigin("http://localhost:3000")
 public class MetadataPagingSortingController {
 
-    private final MetadataPagingSortingService metadataPagingSortingService;
+    private final IMetadataPagingSortingService metadataPagingSortingService;
 
     @GetMapping("/list")
     public Page<Metadata> getMetadataList(
@@ -48,11 +48,7 @@ public class MetadataPagingSortingController {
                     Sort.Order.by(SORT_BY_GENRE.getValue()),
                     Sort.Order.by(SORT_BY_CREATE_DATE.getValue())
             );
-
-
-
-                    pageable = PageRequest.of(pageNumber, pageSize, sort);
-//            pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.fromString(sortDirection), sort));
+            pageable = PageRequest.of(pageNumber, pageSize, sort);
             return metadataPagingSortingService.getAllMetadataByType(RelationType.valueOf(type.toUpperCase()), pageable);
         } catch (Exception e) { // IllegalArgumentException e
             pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.fromString(sortDirection), sortBy));

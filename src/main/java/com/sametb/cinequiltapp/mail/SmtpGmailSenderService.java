@@ -4,6 +4,7 @@ import com.sametb.cinequiltapp._custom.SamTextFormat;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -26,7 +27,10 @@ import java.io.File;
 @RequiredArgsConstructor
 public class SmtpGmailSenderService {
 
+
     private final MailContentBuilder mailContentBuilder;
+
+    @Autowired
     private final JavaMailSender emailSender;
     
     public void sendEmail(String toEmail, String subject, String body){
@@ -104,14 +108,19 @@ public class SmtpGmailSenderService {
         String subject = mailContentBuilder.subjectBuilder(username);
         String body = mailContentBuilder.bodyBuilder(username);
 
-
-        sendEmailWithImageAndLink(
+        sendEmail(
                 toEmail,
                 subject,
-                body,
-                mailContentBuilder.getMailImage(),
-                mailContentBuilder.getDirectLink()
+                body
         );
+
+//        sendEmailWithImageAndLink(
+//                toEmail,
+//                subject,
+//                body,
+//                mailContentBuilder.getMailImage(),
+//                mailContentBuilder.getDirectLink()
+//        );
     }
 
     public void defaultFarewell(String toEmail, String username){

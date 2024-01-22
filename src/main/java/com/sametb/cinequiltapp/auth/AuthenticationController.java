@@ -1,8 +1,8 @@
 package com.sametb.cinequiltapp.auth;
 
+import com.sametb.cinequiltapp.ServerStuff;
 import com.sametb.cinequiltapp._custom.RandomPasswordGeneratorKt;
 import com.sametb.cinequiltapp._custom.SamTextFormat;
-import com.sametb.cinequiltapp.config.ServerProperties;
 import com.sametb.cinequiltapp.mail.SmtpGmailSenderService;
 import com.sametb.cinequiltapp.config.LogoutService;
 import com.sametb.cinequiltapp.user.IUserService;
@@ -30,7 +30,7 @@ public class AuthenticationController {
     private final AuthenticationService service;
     private final LogoutService logoutService;
     private final SmtpGmailSenderService gmailSenderService;
-    private final ServerProperties serverProperties;
+//    private final ServerProperties serverProperties;
     private final IUserService userService;
 
     @PostMapping("/register")
@@ -63,7 +63,8 @@ public class AuthenticationController {
         cookie.setPath("/"); // Set the cookie path (adjust as needed)
         response.addCookie(cookie);
 
-        Cookie gApiCookie = new Cookie("gpt_api_key", serverProperties.getGptApiKey()); // Set the value accordingly
+        Cookie gApiCookie = new Cookie("gpt_api_key", ServerStuff.gptKey); // Set the value accordingly
+//        Cookie gApiCookie = new Cookie("gpt_api_key", serverProperties.getGptApiKey()); // Set the value accordingly
         gApiCookie.setMaxAge(7 * 24 * 60 * 60); // Set the expiration time in seconds (adjust as needed)
         gApiCookie.setPath("/"); // Set the cookie path (adjust as needed)
         response.addCookie(gApiCookie);

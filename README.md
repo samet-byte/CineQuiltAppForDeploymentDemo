@@ -1,4 +1,4 @@
-# Cine Quilt App
+# Getting Started: CineQuilt React App
 
 Web Design and Applications Term Project Backend
 
@@ -129,11 +129,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 > import requests
 > 
 > bearer_token = 'TOKEN_GOES_HERE'
-> # content_id = 641
-> # query = 'Sherlock'
 > content_id = input("Enter content id: ")
 > query = input("Enter query: ")
-> api_key = 'e7ce7a37cf9ed48b92b0d582160622a7'
+> api_key = 'TMDB_API_KEY_GOES_HERE'
 > 
 > def post_episode(episode_number, episode_name, episode_description, season_number):
 >     # Replace the following placeholder values with your actual endpoint and request body

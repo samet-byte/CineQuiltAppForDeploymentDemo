@@ -34,13 +34,13 @@ public class SeriesController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('manager:create')")
+    @PreAuthorize("hasRole('ADMIN')")
     public Series createSeries(@RequestBody SeriesRequest series) {
         return seriesService.save(SeriesBuilder.buildSeriesWithMetadataRequestAndSeriesRequest(series));
     }
 
     @PutMapping(value = "/{id}")
-    @PreAuthorize("hasRole('manager:update')")
+    @PreAuthorize("hasRole('ADMIN')")
     public Series updateSeries(@NonNull @PathVariable Integer id, @NotNull @RequestBody Series series) {
         series.setId(id);
         return seriesService.update(series);

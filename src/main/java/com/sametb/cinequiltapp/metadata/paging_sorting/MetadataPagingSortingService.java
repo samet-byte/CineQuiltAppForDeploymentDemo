@@ -17,14 +17,16 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class MetadataPagingSortingService {
+public class MetadataPagingSortingService implements IMetadataPagingSortingService {
 
     private final MetadataPagingSortingRepository metadataPSRepository;
 
+    @Override
     public Page<Metadata> getAllMetadata(Pageable pageable) {
         return metadataPSRepository.findAll(pageable);
     }
 
+    @Override
     public Page<Metadata> getAllMetadataByType(RelationType type, Pageable pageable) {
         return metadataPSRepository.getAllByType(type, pageable);
     }

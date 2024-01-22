@@ -19,13 +19,15 @@ import static com.sametb.cinequiltapp.config.HttpMethods.*;
 @Configuration
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
-    private final ServerProperties serverProperties;
+//    private final ServerProperties serverProperties;
+//        registry.addMapping(serverProperties.getApiAllowAll())
+//                .allowedOrigins(serverProperties.getOrigin())
 
     @Override
     public void addCorsMappings(@NotNull CorsRegistry registry) {
-        registry.addMapping(serverProperties.getApiAllowAll())
-                .allowedOrigins(serverProperties.getOrigin())
-                .allowCredentials(true)
+        registry.addMapping("/api/**")
+                .allowedOrigins("*")
+//                .allowCredentials(true) //TODO: production -> activate
                 .allowedMethods(
                         String.valueOf(GET),
                         String.valueOf(POST),
