@@ -27,7 +27,7 @@ import static com.sametb.cinequiltapp.fav.FavToggle.getStringObjectMapIsFavedRes
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("${endpoint.favs}")
-@CrossOrigin("http://localhost:3000")
+@CrossOrigin("https://cinequilt.netlify.app")
 public class FavController {
 
         private final IFavService favouriteService;
