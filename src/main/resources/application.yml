@@ -5,9 +5,12 @@ spring:
   datasource:
 #    url: jdbc:postgresql://localhost:5432/cine_demo_db2
 #    username: sametbayat
-    url: ${g.url}
-    username: ${g.username}
-    password: ${g.password}
+#    url: ${g.url}
+#    username: ${g.username}
+#    password: ${g.password}
+    url: jdbc:postgresql://cornelius.db.elephantsql.com:5432/ojhupmoe
+    username: ojhupmoe
+    password: TBvjYLXCSUp13II4iie0YLay6tUVc-wL
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
