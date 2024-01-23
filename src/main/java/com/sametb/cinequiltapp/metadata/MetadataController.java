@@ -13,8 +13,6 @@ import java.util.List;
 
 import static com.sametb.cinequiltapp._custom.CustomFunsKt.decodeString;
 
-// düzenleme,  ekleme
-//crud
 
 @RestController
 @RequiredArgsConstructor
