@@ -28,6 +28,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**") // "/api/**"
                 .allowedOrigins("https://cinequilt.onrender.com")
                 .allowCredentials(true) //TODO: production -> activate
+                .allowedHeaders("*")
                 .allowedMethods(
                         String.valueOf(GET),
                         String.valueOf(POST),
