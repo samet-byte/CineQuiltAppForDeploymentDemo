@@ -21,7 +21,7 @@ import static com.sametb.cinequiltapp._custom.BusinessHelper.getServerIp;
 
 @RestController
 @RequestMapping("${base}")
-@CrossOrigin("https://cinequilt.netlify.app")
+@CrossOrigin(origins = {"https://cinequilt.netlify.app", "http://localhost:8888"})
 public class ApiController {
     @GetMapping("${endpoint.api.ip}")
     public String serverIp() {

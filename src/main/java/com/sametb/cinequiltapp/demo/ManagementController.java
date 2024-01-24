@@ -22,7 +22,7 @@ import java.util.List;
 @Tag(name = "Management")
 @PreAuthorize("hasRole('MANAGEMENT')")
 @RequiredArgsConstructor
-@CrossOrigin("https://cinequilt.netlify.app")
+@CrossOrigin(origins = {"https://cinequilt.netlify.app", "http://localhost:8888"})
 public class ManagementController {
 
     private final MetadataService service;

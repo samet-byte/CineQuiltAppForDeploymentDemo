@@ -17,7 +17,7 @@ import static com.sametb.cinequiltapp._custom.CustomFunsKt.decodeString;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("${endpoint.metadatas}")
-@CrossOrigin("https://cinequilt.netlify.app")
+@CrossOrigin(origins = {"https://cinequilt.netlify.app", "http://localhost:8888"})
 public class MetadataController {
 
 //  instead -> ... =  new MetadataService(repository);

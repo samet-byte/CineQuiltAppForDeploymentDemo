@@ -18,7 +18,7 @@ import static com.sametb.cinequiltapp.metadata.MetadataBuilder.buildMetadataWith
 
 @RestController
 @RequestMapping("${endpoint.movies}")
-@CrossOrigin(origins = "https://cinequilt.netlify.app")
+@CrossOrigin(origins = {"https://cinequilt.netlify.app", "http://localhost:8888"})
 public class MovieController {
 
     private final IMovieService movieService;

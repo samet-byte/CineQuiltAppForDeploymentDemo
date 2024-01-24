@@ -15,7 +15,7 @@ import java.util.Optional;
 @RequestMapping("${endpoint.users}")
 @RequiredArgsConstructor
 //@CrossOrigin("*")
-@CrossOrigin("https://cinequilt.netlify.app")
+@CrossOrigin(origins = {"https://cinequilt.netlify.app", "http://localhost:8888"})
 public class UserController {
 
     private final UserService service;

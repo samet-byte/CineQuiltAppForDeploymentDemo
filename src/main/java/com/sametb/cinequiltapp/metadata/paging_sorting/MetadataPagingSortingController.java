@@ -24,7 +24,7 @@ import static com.sametb.cinequiltapp.metadata.paging_sorting.SortMetadata.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("${endpoint.metadatas-search}")
-@CrossOrigin("https://cinequilt.netlify.app")
+@CrossOrigin(origins = {"https://cinequilt.netlify.app", "http://localhost:8888"})
 public class MetadataPagingSortingController {
 
     private final IMetadataPagingSortingService metadataPagingSortingService;
