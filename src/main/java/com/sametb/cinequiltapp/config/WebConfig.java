@@ -26,7 +26,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(@NotNull CorsRegistry registry) {
         registry.addMapping("/**") // "/api/**"
-                .allowedOrigins("https://cinequilt.onrender.com")
+                .allowedOrigins("https://cinequilt.onrender.com", "http://localhost:8888")
                 .allowCredentials(true) //TODO: production -> activate
                 .allowedHeaders("*")
                 .allowedMethods(
