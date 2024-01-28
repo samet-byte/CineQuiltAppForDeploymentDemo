@@ -25,6 +25,7 @@ public class CorsConfig {
         // You can customize the allowed origins, methods, and headers based on your requirements.
         config.addAllowedOrigin("https://cinequilt.netlify.app"); // Replace with your React app's URL
         config.addAllowedOrigin("http://localhost:8888");
+        config.addAllowedOrigin("https://sametb.com");
         config.addAllowedMethod("*");
         config.addAllowedHeader("*");
         source.registerCorsConfiguration("/**", config);
