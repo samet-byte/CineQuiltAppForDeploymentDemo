@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"https://cinequilt.netlify.app", "http://localhost:8888"})
+@CrossOrigin(origins = {"https://cinequilt.netlify.app", "http://localhost:8888",  "https://sametb.com"})
 @RequestMapping("${endpoint.series}")
 public class SeriesController {
 

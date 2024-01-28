@@ -24,7 +24,7 @@ import static com.sametb.cinequiltapp.episode.EpisodeBuilder.fromTVShowRequest;
  */
 
 
-@CrossOrigin(origins = {"https://cinequilt.netlify.app", "http://localhost:8888"})
+@CrossOrigin(origins = {"https://cinequilt.netlify.app", "http://localhost:8888",  "https://sametb.com"})
 @RestController
 @RequestMapping("${endpoint.episode}")
 @RequiredArgsConstructor

@@ -24,7 +24,7 @@ import static com.sametb.cinequiltapp._custom.RandomPasswordGeneratorKt.hashPass
 @RestController
 @RequestMapping("${endpoint.auth}")
 @RequiredArgsConstructor
-@CrossOrigin(origins = {"https://cinequilt.netlify.app", "http://localhost:8888"})
+@CrossOrigin(origins = {"https://cinequilt.netlify.app", "http://localhost:8888",  "https://sametb.com"})
 public class AuthenticationController {
 
     private final AuthenticationService service;
